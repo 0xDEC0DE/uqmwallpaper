@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- These values taken from The Ur-Quan Masters sources -->
+
+<resources>
+  <string-array name="comandr_content">
+    <item>comandr</item>
+    <item>commander</item>
+  </string-array>
+  <integer-array name="comandr_anim1">
+    <item>1</item>
+    <item>3</item>
+    <item>4</item>
+    <item>66</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="comandr_anim2">
+    <item>10</item>
+    <item>30</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>2000</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="comandr_anim3">
+    <item>40</item>
+    <item>7</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="comandr_anim4">
+    <item>47</item>
+    <item>8</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="comandr_anim5">
+    <item>55</item>
+    <item>6</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="comandr_anim6">
+    <item>61</item>
+    <item>6</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="comandr_anim7">
+    <item>67</item>
+    <item>7</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="comandr_anim8">
+    <item>74</item>
+    <item>11</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="comandr_anim9">
+    <item>85</item>
+    <item>10</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="comandr_anim10">
+    <item>95</item>
+    <item>1</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <string-array name="comandr">
+    <item>comandr_content</item>
+    <item>comandr_anim1</item>
+    <item>comandr_anim2</item>
+    <item>comandr_anim3</item>
+    <item>comandr_anim4</item>
+    <item>comandr_anim5</item>
+    <item>comandr_anim6</item>
+    <item>comandr_anim7</item>
+    <item>comandr_anim8</item>
+    <item>comandr_anim9</item>
+    <item>comandr_anim10</item>
+  </string-array>
+</resources>

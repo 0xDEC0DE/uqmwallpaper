@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- These values taken from The Ur-Quan Masters sources -->
+
+<resources>
+  <string-array name="utwig_content">
+    <item>utwig</item>
+  </string-array>
+  <integer-array name="utwig_anim1">
+    <item>4</item>
+    <item>3</item>
+    <item>4</item>
+    <item>66</item>
+    <item>33</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim2">
+    <item>7</item>
+    <item>4</item>
+    <item>4</item>
+    <item>66</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>4</item>
+  </integer-array>
+  <integer-array name="utwig_anim3">
+    <item>11</item>
+    <item>2</item>
+    <item>12</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>2</item>
+  </integer-array>
+  <integer-array name="utwig_anim4">
+    <item>13</item>
+    <item>5</item>
+    <item>2</item>
+    <item>83</item>
+    <item>0</item>
+    <item>83</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim5">
+    <item>18</item>
+    <item>2</item>
+    <item>1</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim6">
+    <item>20</item>
+    <item>2</item>
+    <item>1</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim7">
+    <item>22</item>
+    <item>3</item>
+    <item>1</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim8">
+    <item>25</item>
+    <item>2</item>
+    <item>1</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim9">
+    <item>27</item>
+    <item>3</item>
+    <item>4</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim10">
+    <item>30</item>
+    <item>2</item>
+    <item>1</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim11">
+    <item>32</item>
+    <item>2</item>
+    <item>1</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim12">
+    <item>34</item>
+    <item>2</item>
+    <item>1</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim13">
+    <item>36</item>
+    <item>2</item>
+    <item>1</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim14">
+    <item>38</item>
+    <item>2</item>
+    <item>1</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim15">
+    <item>40</item>
+    <item>2</item>
+    <item>1</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="utwig_anim16">
+    <item>42</item>
+    <item>3</item>
+    <item>4</item>
+    <item>133</item>
+    <item>33</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <string-array name="utwig">
+    <item>utwig_content</item>
+    <item>utwig_anim1</item>
+    <item>utwig_anim2</item>
+    <item>utwig_anim3</item>
+    <item>utwig_anim4</item>
+    <item>utwig_anim5</item>
+    <item>utwig_anim6</item>
+    <item>utwig_anim7</item>
+    <item>utwig_anim8</item>
+    <item>utwig_anim9</item>
+    <item>utwig_anim10</item>
+    <item>utwig_anim11</item>
+    <item>utwig_anim12</item>
+    <item>utwig_anim13</item>
+    <item>utwig_anim14</item>
+    <item>utwig_anim15</item>
+    <item>utwig_anim16</item>
+  </string-array>
+</resources>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- These values taken from The Ur-Quan Masters sources -->
+
+<resources>
+  <string-array name="umgah_content">
+    <item>umgah</item>
+  </string-array>
+  <integer-array name="umgah_anim1">
+    <item>5</item>
+    <item>3</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>32</item>
+  </integer-array>
+  <integer-array name="umgah_anim2">
+    <item>8</item>
+    <item>3</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>64</item>
+  </integer-array>
+  <integer-array name="umgah_anim3">
+    <item>11</item>
+    <item>2</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>128</item>
+  </integer-array>
+  <integer-array name="umgah_anim4">
+    <item>13</item>
+    <item>2</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>256</item>
+  </integer-array>
+  <integer-array name="umgah_anim5">
+    <item>15</item>
+    <item>2</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>512</item>
+  </integer-array>
+  <integer-array name="umgah_anim6">
+    <item>17</item>
+    <item>3</item>
+    <item>2</item>
+    <item>116</item>
+    <item>0</item>
+    <item>3000</item>
+    <item>3000</item>
+    <item>1</item>
+  </integer-array>
+  <integer-array name="umgah_anim7">
+    <item>20</item>
+    <item>3</item>
+    <item>2</item>
+    <item>116</item>
+    <item>0</item>
+    <item>3000</item>
+    <item>3000</item>
+    <item>2</item>
+  </integer-array>
+  <integer-array name="umgah_anim8">
+    <item>23</item>
+    <item>2</item>
+    <item>2</item>
+    <item>116</item>
+    <item>0</item>
+    <item>3000</item>
+    <item>3000</item>
+    <item>4</item>
+  </integer-array>
+  <integer-array name="umgah_anim9">
+    <item>25</item>
+    <item>2</item>
+    <item>2</item>
+    <item>116</item>
+    <item>0</item>
+    <item>3000</item>
+    <item>3000</item>
+    <item>8</item>
+  </integer-array>
+  <integer-array name="umgah_anim10">
+    <item>27</item>
+    <item>2</item>
+    <item>2</item>
+    <item>116</item>
+    <item>0</item>
+    <item>3000</item>
+    <item>3000</item>
+    <item>16</item>
+  </integer-array>
+  <integer-array name="umgah_anim11">
+    <item>29</item>
+    <item>3</item>
+    <item>4</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="umgah_anim12">
+    <item>32</item>
+    <item>3</item>
+    <item>4</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="umgah_anim13">
+    <item>35</item>
+    <item>5</item>
+    <item>4</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="umgah_anim14">
+    <item>40</item>
+    <item>6</item>
+    <item>4</item>
+    <item>100</item>
+    <item>0</item>
+    <item>100</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="umgah_anim15">
+    <item>46</item>
+    <item>2</item>
+    <item>2</item>
+    <item>200</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>32768</item>
+  </integer-array>
+  <integer-array name="umgah_anim16">
+    <item>48</item>
+    <item>2</item>
+    <item>2</item>
+    <item>200</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>16384</item>
+  </integer-array>
+  <string-array name="umgah">
+    <item>umgah_content</item>
+    <item>umgah_anim1</item>
+    <item>umgah_anim2</item>
+    <item>umgah_anim3</item>
+    <item>umgah_anim4</item>
+    <item>umgah_anim5</item>
+    <item>umgah_anim6</item>
+    <item>umgah_anim7</item>
+    <item>umgah_anim8</item>
+    <item>umgah_anim9</item>
+    <item>umgah_anim10</item>
+    <item>umgah_anim11</item>
+    <item>umgah_anim12</item>
+    <item>umgah_anim13</item>
+    <item>umgah_anim14</item>
+    <item>umgah_anim15</item>
+    <item>umgah_anim16</item>
+  </string-array>
+</resources>

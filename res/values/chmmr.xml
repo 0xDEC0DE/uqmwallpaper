@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- These values taken from The Ur-Quan Masters sources -->
+
+<resources>
+  <string-array name="chmmr_content">
+    <item>chmmr</item>
+  </string-array>
+  <integer-array name="chmmr_anim1">
+    <item>12</item>
+    <item>5</item>
+    <item>2</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="chmmr_anim2">
+    <item>17</item>
+    <item>5</item>
+    <item>2</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="chmmr_anim3">
+    <item>22</item>
+    <item>5</item>
+    <item>2</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="chmmr_anim4">
+    <item>27</item>
+    <item>20</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="chmmr_anim5">
+    <item>47</item>
+    <item>14</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="chmmr_anim6">
+    <item>61</item>
+    <item>24</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <string-array name="chmmr">
+    <item>chmmr_content</item>
+    <item>chmmr_anim1</item>
+    <item>chmmr_anim2</item>
+    <item>chmmr_anim3</item>
+    <item>chmmr_anim4</item>
+    <item>chmmr_anim5</item>
+    <item>chmmr_anim6</item>
+  </string-array>
+</resources>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="racesNames">
+    <item>Arilou</item>
+    <item>Chmmr</item>
+    <item>Druuge</item>
+    <item>Ilwrath</item>
+    <item>Kohr-Ah</item>
+    <item>Melnorme</item>
+    <item>Mycon</item>
+    <item>Orz</item>
+    <item>Pkunk</item>
+    <item>Shofixti</item>
+    <item>Slylandro (gas bags)</item>
+    <item>Slylandro (2418-B probes)</item>
+    <item>Spathi (homeworld)</item>
+    <item>Spathi</item>
+    <item>Starbase</item>
+    <item>Supox</item>
+    <item>Syreen</item>
+    <item>Talking Pet</item>
+    <item>Thraddash</item>
+    <item>Umgah</item>
+    <item>Ur-Quan</item>
+    <item>Utwig</item>
+    <item>VUX</item>
+    <item>Yehat</item>
+    <item>Zoq-Fot-Pik</item>
+  </string-array>
+  <string-array name="races">
+    <item>arilou</item>
+    <item>chmmr</item>
+    <item>druuge</item>
+    <item>ilwrath</item>
+    <item>blackur</item>
+    <item>melnorm</item>
+    <item>mycon</item>
+    <item>orz</item>
+    <item>pkunk</item>
+    <item>shofixt</item>
+    <item>slyhome</item>
+    <item>slyland</item>
+    <item>spahome</item>
+    <item>spathi</item>
+    <item>comandr</item>
+    <item>supox</item>
+    <item>syreen</item>
+    <item>talkpet</item>
+    <item>thradd</item>
+    <item>umgah</item>
+    <item>urquan</item>
+    <item>utwig</item>
+    <item>vux</item>
+    <item>yehat</item>
+    <item>zoqfot</item>
+  </string-array>
+  <string-array name="scalingDesc">
+    <item>No Scaling</item>
+    <item>Scale to Single Screen</item>
+    <item>Scale Across All Screens</item>
+  </string-array>
+  <string-array name="scaling">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+  </string-array>
+</resources>

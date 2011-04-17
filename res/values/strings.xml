@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+<string name="app_name">The Ur-Quan Masters Live Wallpaper</string>
+<string name="app_desc">Animations from The Ur-Quan Masters</string>
+<string name="preferences_label">Settings</string>
+<string name="app_settings">The Ur-Quan Masters Live Wallpaper Settings</string>
+<string name="app_author">Nicolas Simonds</string>
+<string name="fetch_content">
+Due to U.S. Copyright restrictions, the content pack used by this
+software cannot be distributed with it, and must be obtained separately.
+
+To download the content pack, link here:
+http://prdownloads.sourceforge.net/sc2/uqm-0.6.0-content.uqm?download
+
+Then click "OK" to locate the content pack on your SD card
+</string>
+<string name="no_content1">No content pack selected.</string>
+<string name="no_content2">Please select a content pack from the Settings menu</string>
+</resources>

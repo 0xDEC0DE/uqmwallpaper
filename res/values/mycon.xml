@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- These values taken from The Ur-Quan Masters sources -->
+
+<resources>
+  <string-array name="mycon_content">
+    <item>mycon</item>
+  </string-array>
+  <integer-array name="mycon_anim1">
+    <item>12</item>
+    <item>6</item>
+    <item>2</item>
+    <item>75</item>
+    <item>0</item>
+    <item>75</item>
+    <item>0</item>
+    <item>2</item>
+  </integer-array>
+  <integer-array name="mycon_anim2">
+    <item>18</item>
+    <item>4</item>
+    <item>2</item>
+    <item>75</item>
+    <item>0</item>
+    <item>75</item>
+    <item>0</item>
+    <item>1</item>
+  </integer-array>
+  <integer-array name="mycon_anim3">
+    <item>22</item>
+    <item>6</item>
+    <item>2</item>
+    <item>75</item>
+    <item>0</item>
+    <item>75</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="mycon_anim4">
+    <item>28</item>
+    <item>5</item>
+    <item>2</item>
+    <item>75</item>
+    <item>0</item>
+    <item>75</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="mycon_anim5">
+    <item>33</item>
+    <item>4</item>
+    <item>4</item>
+    <item>75</item>
+    <item>0</item>
+    <item>75</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <string-array name="mycon">
+    <item>mycon_content</item>
+    <item>mycon_anim1</item>
+    <item>mycon_anim2</item>
+    <item>mycon_anim3</item>
+    <item>mycon_anim4</item>
+    <item>mycon_anim5</item>
+  </string-array>
+</resources>

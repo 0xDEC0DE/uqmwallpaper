@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- These values taken from The Ur-Quan Masters sources -->
+
+<resources>
+  <string-array name="orz_content">
+    <item>orz</item>
+  </string-array>
+  <integer-array name="orz_anim1">
+    <item>4</item>
+    <item>6</item>
+    <item>2</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="orz_anim2">
+    <item>10</item>
+    <item>5</item>
+    <item>2</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="orz_anim3">
+    <item>15</item>
+    <item>2</item>
+    <item>1</item>
+    <item>100</item>
+    <item>100</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="orz_anim4">
+    <item>17</item>
+    <item>3</item>
+    <item>4</item>
+    <item>100</item>
+    <item>100</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="orz_anim5">
+    <item>20</item>
+    <item>2</item>
+    <item>4</item>
+    <item>100</item>
+    <item>0</item>
+    <item>100</item>
+    <item>3000</item>
+    <item>128</item>
+  </integer-array>
+  <integer-array name="orz_anim6">
+    <item>22</item>
+    <item>8</item>
+    <item>2</item>
+    <item>100</item>
+    <item>0</item>
+    <item>100</item>
+    <item>3000</item>
+    <item>64</item>
+  </integer-array>
+  <integer-array name="orz_anim7">
+    <item>30</item>
+    <item>3</item>
+    <item>2</item>
+    <item>100</item>
+    <item>0</item>
+    <item>100</item>
+    <item>3000</item>
+    <item>32</item>
+  </integer-array>
+  <integer-array name="orz_anim8">
+    <item>33</item>
+    <item>3</item>
+    <item>4</item>
+    <item>100</item>
+    <item>0</item>
+    <item>100</item>
+    <item>3000</item>
+    <item>16</item>
+  </integer-array>
+  <integer-array name="orz_anim9">
+    <item>36</item>
+    <item>25</item>
+    <item>2</item>
+    <item>16</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="orz_anim10">
+    <item>61</item>
+    <item>15</item>
+    <item>2</item>
+    <item>16</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="orz_anim11">
+    <item>76</item>
+    <item>17</item>
+    <item>2</item>
+    <item>16</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>4096</item>
+  </integer-array>
+  <integer-array name="orz_anim12">
+    <item>93</item>
+    <item>25</item>
+    <item>2</item>
+    <item>16</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="orz_anim13">
+    <item>118</item>
+    <item>11</item>
+    <item>2</item>
+    <item>16</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>1024</item>
+  </integer-array>
+  <string-array name="orz">
+    <item>orz_content</item>
+    <item>orz_anim1</item>
+    <item>orz_anim2</item>
+    <item>orz_anim3</item>
+    <item>orz_anim4</item>
+    <item>orz_anim5</item>
+    <item>orz_anim6</item>
+    <item>orz_anim7</item>
+    <item>orz_anim8</item>
+    <item>orz_anim9</item>
+    <item>orz_anim10</item>
+    <item>orz_anim11</item>
+    <item>orz_anim12</item>
+    <item>orz_anim13</item>
+  </string-array>
+</resources>
