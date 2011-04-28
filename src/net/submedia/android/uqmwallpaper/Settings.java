@@ -149,7 +149,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPref
 			final SpannableString s = new SpannableString(this.getText(R.string.fetch_content));
 			Linkify.addLinks(s, Linkify.WEB_URLS);
 			final AlertDialog d = new AlertDialog.Builder(this)
-					.setTitle("Notice")
+					.setTitle(this.getText(R.string.fetch_content_hdr))
 					.setMessage(s)
 					.setPositiveButton(android.R.string.ok, okButton)
 					.show();

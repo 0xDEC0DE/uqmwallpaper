@@ -109,15 +109,15 @@
   </integer-array>
   <string-array name="comandr">
     <item>comandr_content</item>
-    <item>comandr_anim1</item>
-    <item>comandr_anim2</item>
-    <item>comandr_anim3</item>
-    <item>comandr_anim4</item>
-    <item>comandr_anim5</item>
-    <item>comandr_anim6</item>
-    <item>comandr_anim7</item>
-    <item>comandr_anim8</item>
-    <item>comandr_anim9</item>
     <item>comandr_anim10</item>
+    <item>comandr_anim9</item>
+    <item>comandr_anim8</item>
+    <item>comandr_anim7</item>
+    <item>comandr_anim6</item>
+    <item>comandr_anim5</item>
+    <item>comandr_anim4</item>
+    <item>comandr_anim3</item>
+    <item>comandr_anim2</item>
+    <item>comandr_anim1</item>
   </string-array>
 </resources>

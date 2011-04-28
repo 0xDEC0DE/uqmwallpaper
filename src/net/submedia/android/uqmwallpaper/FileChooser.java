@@ -66,8 +66,8 @@ public class FileChooser extends ListActivity {
 			}
 			catch (Exception e) {
 				new AlertDialog.Builder(this)
-				.setTitle("Error")
-				.setMessage("Cannot browse to directory\n" +
+				.setTitle(this.getText(R.string.filechooser_error_hdr))
+				.setMessage(this.getText(R.string.filechooser_error) + "\n" +
 							aDirectory.getAbsolutePath())
 				.setPositiveButton(android.R.string.ok, okButton)
 				.show();
@@ -81,10 +81,9 @@ public class FileChooser extends ListActivity {
 				this.finish();
 			} catch (IOException ioe) {
 				new AlertDialog.Builder(this)
-					.setTitle("Error")
-					.setMessage("File\n" +
-								aDirectory.getAbsolutePath() +
-								"\nis not a valid content pack")
+					.setTitle(this.getText(R.string.filechooser_error_hdr))
+					.setMessage(aDirectory.getAbsolutePath() + "\n" +
+								this.getText(R.string.filechooser_error_badcontent))
 					.setPositiveButton(android.R.string.ok, okButton)
 					.show();
 			}

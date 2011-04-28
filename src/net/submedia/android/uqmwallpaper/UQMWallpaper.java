@@ -24,6 +24,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.os.Environment;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
@@ -31,6 +32,7 @@ import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import java.lang.Integer;
+import java.lang.Thread;
 
 public class UQMWallpaper extends WallpaperService {
 
@@ -87,6 +89,15 @@ public class UQMWallpaper extends WallpaperService {
 			mPrefs = UQMWallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
 			mPrefs.registerOnSharedPreferenceChangeListener(this);
 			onSharedPreferenceChanged(mPrefs, null);
+			// block indefinitely on the external storage coming online.
+			// Needed in order to initialize properly after reboots
+			while (! Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					continue;
+				}
+			}
 			Log.v(TAG, "started");
 		}
 
@@ -160,6 +171,8 @@ public class UQMWallpaper extends WallpaperService {
 					}
 					mAnim = null;
 				}
+			} else {
+				setAspect(mAnim.getFrame());
 			}
 
 			drawFrame();
