@@ -19,8 +19,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.submedia.android.uqmwallpaper"
-    android:versionCode="101"
-    android:versionName="1.0.1"
+    android:versionCode="102"
+    android:versionName="1.0.2"
 >
 
     <uses-sdk android:minSdkVersion="7" />
@@ -42,7 +42,6 @@
         <activity
             android:label="@string/app_settings"
             android:name=".Settings"
-            android:theme="@android:style/Theme.WallpaperSettings"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

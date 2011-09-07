@@ -17,13 +17,15 @@
 package net.submedia.android.uqmwallpaper;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.ApplicationInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,9 +47,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPref
 	private static final String CONTENT_PREF = "contentPack";
 	private static final String ALIEN_RACE = "race";
 	private static final String SCALING = "scaling";
+	private static final String VERSION = "version";
 	private Preference mContent;
 	private ListPreference mAlien;
 	private ListPreference mScaling;
+	private Preference mVersion;
 
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -61,6 +65,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPref
 		mContent = (Preference) findPreference(CONTENT_PREF);
 		mAlien = (ListPreference) findPreference(ALIEN_RACE);
 		mScaling = (ListPreference) findPreference(SCALING);
+		mVersion = (Preference) findPreference(VERSION);
+
+		mVersion.setSummary(getVersionName());
 
 		String buf;
 		if ((buf = prefs.getString(CONTENT_PREF, null)) != null)
@@ -200,5 +207,17 @@ implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPref
 
 	private String get_by_value(ListPreference l, String buf) {
 		return (String) l.getEntries()[l.findIndexOfValue(buf)];
+	}
+
+	private String getVersionName() {
+		try {
+			PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+			if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0)
+				return pi.versionName;
+			else
+				return pi.versionName + "-debug";
+		} catch (Exception e) {
+			return "UNKNOWN";
+		}
 	}
 }

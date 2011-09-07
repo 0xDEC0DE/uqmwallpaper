@@ -176,6 +176,16 @@
     <item>5000</item>
     <item>0</item>
   </integer-array>
+  <integer-array name="vux_anim18">
+    <item>1</item>
+    <item>11</item>
+    <item>2</item>
+    <item>66</item>
+    <item>66</item>
+    <item>10000</item>
+    <item>10000</item>
+    <item>0</item>
+  </integer-array>
   <string-array name="vux">
     <item>vux_content</item>
     <item>vux_anim1</item>
@@ -195,5 +205,6 @@
     <item>vux_anim15</item>
     <item>vux_anim16</item>
     <item>vux_anim17</item>
+    <item>vux_anim18</item>
   </string-array>
 </resources>

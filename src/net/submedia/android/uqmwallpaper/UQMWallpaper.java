@@ -39,9 +39,6 @@ public class UQMWallpaper extends WallpaperService {
 	public static final String SHARED_PREFS_NAME = "uqmwallpaper";
 	public static final String TAG = "UQMWallpaper";
 
-	// comm frame rate according to UQM sources
-	public static final int FRAME_RATE = (1000 / 40);
-
 	private final Handler mHandler = new Handler();
 	private static Context mContext;
 
@@ -213,6 +210,8 @@ public class UQMWallpaper extends WallpaperService {
 		 */
 		void drawFrame() {
 			final SurfaceHolder holder = getSurfaceHolder();
+			// comm frame rate according to UQM sources
+			int delay = (1000 / 40);
 
 			Canvas c = null;
 			try {
@@ -258,6 +257,7 @@ public class UQMWallpaper extends WallpaperService {
 						if (b != null) {
 							c.drawBitmap(b, x, y, null);
 						}
+						delay = mAnim.next_frame_delay;
 					}
 				}
 			} finally {
@@ -267,7 +267,7 @@ public class UQMWallpaper extends WallpaperService {
 			// Reschedule the next redraw
 			mHandler.removeCallbacks(mDrawComms);
 			if (mVisible) {
-				mHandler.postDelayed(mDrawComms, FRAME_RATE);
+				mHandler.postDelayed(mDrawComms, delay);
 			}
 		}
 	}

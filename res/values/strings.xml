@@ -21,4 +21,10 @@ Then click "OK" to locate the content pack on your SD card
 <string name="filechooser_error_hdr">Error</string>
 <string name="filechooser_error">Cannot browse to directory</string>
 <string name="filechooser_error_badcontent">is not a valid content pack</string>
+<string name="content_pack_title">Content Pack</string>
+<string name="content_pack_summary">Location of the content pack from The Ur-Quan Masters</string>
+<string name="alien_title">Alien</string>
+<string name="alien_summary">Choose the alien to display</string>
+<string name="scaling_title">Scale Wallpaper</string>
+<string name="version_title">Application Version</string>
 </resources>

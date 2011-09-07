@@ -32,6 +32,10 @@ class Animation {
 
 	public static final String TAG = "UQMWallpaper.Animation";
 
+	// comm frame rate according to UQM sources
+	public static final int FRAME_RATE = (1000 / 40);
+	public int next_frame_delay;
+
 	public final byte RANDOM_ANIM = (1 << 0);
 	// The next index is randomly chosen.
 	public final byte CIRCULAR_ANIM = (1 << 1);
@@ -111,6 +115,7 @@ class Animation {
 		long ElapsedTicks = CurTime - this.LastTime;
 		int i = 0;
 
+		this.next_frame_delay = 0x7FFFFFFF;
 		this.LastTime = CurTime;
 
 		// scribble all the updates onto the canvas
@@ -120,6 +125,8 @@ class Animation {
 			// but not yet...
 			if (f.Alarm > ElapsedTicks) {
 				f.Alarm -= ElapsedTicks;
+				if (f.Alarm < this.next_frame_delay)
+					this.next_frame_delay = f.Alarm;
 				continue;
 			}
 			if ((ActiveMask & f.BlockMask) != 0) {
@@ -129,10 +136,15 @@ class Animation {
 				ActiveMask |= ActiveBit;
 			}
 
+			// Log.d(TAG, String.format("ActiveBit: %#x ActiveMask: %#x", ActiveBit, ActiveMask));
+
 			DrawStamp(this.content.frame.get(f.CurIndex));
 
 			// setup next iteration
 			f.Alarm = f.randomFrameRate();
+			if (f.Alarm < this.next_frame_delay)
+				this.next_frame_delay = f.Alarm;
+
 			final int num_frames = f.NumFrames - 1;
 
 			if (YOYO_ANIM == (f.AnimFlags & YOYO_ANIM)) {
@@ -163,10 +175,14 @@ class Animation {
 			}
 			else if (RANDOM_ANIM == (f.AnimFlags & RANDOM_ANIM)) {
 				f.CurIndex = (short) (f.StartIndex + rand.nextInt(num_frames));
+				ActiveMask &= ~ActiveBit;
 			}
 
 			// Log.d(TAG, f.toString());
 		}
+
+		if (this.next_frame_delay < FRAME_RATE || this.next_frame_delay == 0x7FFFFFFF)
+			this.next_frame_delay = FRAME_RATE;
 
 		// return the resulting bitmap
 		return this.result;
