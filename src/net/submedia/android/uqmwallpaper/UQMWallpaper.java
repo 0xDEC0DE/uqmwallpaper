@@ -31,13 +31,12 @@ import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
-import java.lang.Integer;
-import java.lang.Thread;
+import java.util.Locale;
 
 public class UQMWallpaper extends WallpaperService {
 
-	public static final String SHARED_PREFS_NAME = "uqmwallpaper";
 	public static final String TAG = "UQMWallpaper";
+	public static final String SHARED_PREFS_NAME = TAG.toLowerCase(Locale.US);
 
 	private final Handler mHandler = new Handler();
 	private static Context mContext;
@@ -48,7 +47,6 @@ public class UQMWallpaper extends WallpaperService {
 		mContext = this;
 	}
 
-	// XXX: switching contexts might confuse the hell out of things
 	public static Context getContext() {
 		return mContext;
 	}

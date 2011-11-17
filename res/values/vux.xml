@@ -178,12 +178,12 @@
   </integer-array>
   <integer-array name="vux_anim18">
     <item>1</item>
-    <item>11</item>
+    <item>1</item>
     <item>2</item>
     <item>66</item>
     <item>66</item>
-    <item>10000</item>
-    <item>10000</item>
+    <item>66</item>
+    <item>0</item>
     <item>0</item>
   </integer-array>
   <string-array name="vux">

@@ -136,7 +136,7 @@ class Animation {
 				ActiveMask |= ActiveBit;
 			}
 
-			// Log.d(TAG, String.format("ActiveBit: %#x ActiveMask: %#x", ActiveBit, ActiveMask));
+			// Log.d(TAG, String.format("ActiveBit: %#x ActiveMask: %#x StartIndex: %d NumFrames: %d CurIndex: %d", ActiveBit, ActiveMask, f.StartIndex, f.NumFrames, f.CurIndex));
 
 			DrawStamp(this.content.frame.get(f.CurIndex));
 
@@ -147,7 +147,11 @@ class Animation {
 
 			final int num_frames = f.NumFrames - 1;
 
-			if (YOYO_ANIM == (f.AnimFlags & YOYO_ANIM)) {
+			if (COLORXFORM_ANIM == (f.AnimFlags & COLORXFORM_ANIM)) {
+				ActiveMask &= ~ActiveBit;
+				f.Alarm = 0;
+			}
+			else if (YOYO_ANIM == (f.AnimFlags & YOYO_ANIM)) {
 				if (f.Direction == Direction.UP_DIR) {
 					f.CurIndex++;
 					if (f.CurIndex > (f.StartIndex + num_frames)) {
@@ -174,7 +178,7 @@ class Animation {
 				}
 			}
 			else if (RANDOM_ANIM == (f.AnimFlags & RANDOM_ANIM)) {
-				f.CurIndex = (short) (f.StartIndex + rand.nextInt(num_frames));
+				f.CurIndex = (short) (f.StartIndex + rand.nextInt(f.NumFrames));
 				ActiveMask &= ~ActiveBit;
 			}
 
