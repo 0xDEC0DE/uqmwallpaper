@@ -79,6 +79,11 @@ class Animation {
 	Animation(String content_pack, String alien_race, Context c)
 	throws Exception, IOException {
 
+		// works around a crash bug with
+		// android.content.res.getIdentifier() on 4.x
+		if (alien_race == null)
+			throw new Exception("no alien_race passed");
+
 		final String PACKAGE_NAME = c.getPackageName();
 		final Resources r = c.getResources();
 		final int resid = r.getIdentifier(alien_race, "array", PACKAGE_NAME);

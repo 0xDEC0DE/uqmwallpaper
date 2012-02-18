@@ -105,17 +105,15 @@ public class UQMWallpaper extends WallpaperService {
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 			Log.d(TAG, String.format("%s => %s", key, prefs.toString()));
 			try {
-				if (key != null) {
-					if (key.equals("race")) {
-						mAnim = new Animation(prefs.getString("contentPack", null),
-								prefs.getString("race", null), mContext);
-						Log.d(TAG, mAnim.toString());
-					}
-					else if (key.equals("scaling")) {
-						mScaling = Integer.parseInt(prefs.getString("scaling", "2"));
-					}
-					setAspect(mAnim.getFrame());
+				if (key.equals("race")) {
+					mAnim = new Animation(prefs.getString("contentPack", null),
+							prefs.getString("race", null), mContext);
+					Log.d(TAG, mAnim.toString());
 				}
+				else if (key.equals("scaling")) {
+					mScaling = Integer.parseInt(prefs.getString("scaling", "2"));
+				}
+				setAspect(mAnim.getFrame());
 			} catch (Exception e) {
 				Log.w(TAG, e.toString());
 				for (StackTraceElement t : e.getStackTrace()) {
