@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/app_settings">
+    <ListPreference
+        android:defaultValue="urquan"
+        android:entries="@array/racesNames"
+        android:entryValues="@array/races"
+        android:key="race"
+        android:summary="@string/alien_summary"
+        android:title="@string/alien_title" />
+    <ListPreference
+        android:defaultValue="2"
+        android:entries="@array/scalingDesc"
+        android:entryValues="@array/scaling"
+        android:key="scaling"
+        android:title="@string/scaling_title" />
+    <Preference
+        android:key="version"
+        android:title="@string/version_title" />
+</PreferenceScreen>

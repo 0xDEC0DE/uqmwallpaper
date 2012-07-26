@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- auto-generated from src/sc2code/comm/starbas/starbas.c -->
+<resources>
+  <string-array name="starbas_content">
+    <item>starbas</item>
+    <item>comandr</item>
+    <item>commander</item>
+  </string-array>
+  <integer-array name="starbas_anim0">
+    <item>1</item>
+    <item>3</item>
+    <item>4</item>
+    <item>66</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="starbas_anim1">
+    <item>10</item>
+    <item>30</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>2000</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="starbas_anim2">
+    <item>40</item>
+    <item>7</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="starbas_anim3">
+    <item>47</item>
+    <item>8</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="starbas_anim4">
+    <item>55</item>
+    <item>6</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="starbas_anim5">
+    <item>61</item>
+    <item>6</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="starbas_anim6">
+    <item>67</item>
+    <item>7</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="starbas_anim7">
+    <item>74</item>
+    <item>11</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="starbas_anim8">
+    <item>85</item>
+    <item>10</item>
+    <item>2</item>
+    <item>25</item>
+    <item>0</item>
+    <item>0</item>
+    <item>8000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="starbas_anim9">
+    <item>95</item>
+    <item>1</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <string-array name="starbas">
+    <item>starbas_content</item>
+    <item>starbas_anim9</item>
+    <item>starbas_anim8</item>
+    <item>starbas_anim7</item>
+    <item>starbas_anim6</item>
+    <item>starbas_anim5</item>
+    <item>starbas_anim4</item>
+    <item>starbas_anim3</item>
+    <item>starbas_anim2</item>
+    <item>starbas_anim1</item>
+    <item>starbas_anim0</item>
+  </string-array>
+</resources>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- auto-generated from src/sc2code/comm/ilwrath/ilwrathc.c -->
+<resources>
+  <string-array name="ilwrath_content">
+    <item>ilwrath</item>
+  </string-array>
+  <integer-array name="ilwrath_anim0">
+    <item>6</item>
+    <item>5</item>
+    <item>2</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="ilwrath_anim1">
+    <item>11</item>
+    <item>5</item>
+    <item>2</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="ilwrath_anim2">
+    <item>16</item>
+    <item>5</item>
+    <item>2</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="ilwrath_anim3">
+    <item>21</item>
+    <item>6</item>
+    <item>2</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <string-array name="ilwrath">
+    <item>ilwrath_content</item>
+    <item>ilwrath_anim3</item>
+    <item>ilwrath_anim2</item>
+    <item>ilwrath_anim1</item>
+    <item>ilwrath_anim0</item>
+  </string-array>
+</resources>

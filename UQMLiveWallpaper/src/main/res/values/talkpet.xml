@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- auto-generated from src/sc2code/comm/talkpet/talkpet.c -->
+<resources>
+  <string-array name="talkpet_content">
+    <item>talkpet</item>
+    <item>talkingpet</item>
+  </string-array>
+  <integer-array name="talkpet_anim0">
+    <item>7</item>
+    <item>3</item>
+    <item>12</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="talkpet_anim1">
+    <item>10</item>
+    <item>3</item>
+    <item>12</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="talkpet_anim2">
+    <item>13</item>
+    <item>3</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="talkpet_anim3">
+    <item>16</item>
+    <item>2</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="talkpet_anim4">
+    <item>18</item>
+    <item>3</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>8192</item>
+  </integer-array>
+  <integer-array name="talkpet_anim5">
+    <item>21</item>
+    <item>3</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>20480</item>
+  </integer-array>
+  <integer-array name="talkpet_anim6">
+    <item>24</item>
+    <item>2</item>
+    <item>1</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="talkpet_anim7">
+    <item>26</item>
+    <item>2</item>
+    <item>1</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="talkpet_anim8">
+    <item>28</item>
+    <item>4</item>
+    <item>1</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="talkpet_anim9">
+    <item>32</item>
+    <item>3</item>
+    <item>1</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="talkpet_anim10">
+    <item>35</item>
+    <item>5</item>
+    <item>1</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="talkpet_anim11">
+    <item>40</item>
+    <item>2</item>
+    <item>1</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="talkpet_anim12">
+    <item>42</item>
+    <item>6</item>
+    <item>10</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>32</item>
+  </integer-array>
+  <integer-array name="talkpet_anim13">
+    <item>48</item>
+    <item>2</item>
+    <item>1</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>16</item>
+  </integer-array>
+  <integer-array name="talkpet_anim14">
+    <item>50</item>
+    <item>2</item>
+    <item>1</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>32</item>
+  </integer-array>
+  <integer-array name="talkpet_anim15">
+    <item>52</item>
+    <item>2</item>
+    <item>9</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <string-array name="talkpet">
+    <item>talkpet_content</item>
+    <item>talkpet_anim15</item>
+    <item>talkpet_anim14</item>
+    <item>talkpet_anim13</item>
+    <item>talkpet_anim12</item>
+    <item>talkpet_anim11</item>
+    <item>talkpet_anim10</item>
+    <item>talkpet_anim9</item>
+    <item>talkpet_anim8</item>
+    <item>talkpet_anim7</item>
+    <item>talkpet_anim6</item>
+    <item>talkpet_anim5</item>
+    <item>talkpet_anim4</item>
+    <item>talkpet_anim3</item>
+    <item>talkpet_anim2</item>
+    <item>talkpet_anim1</item>
+    <item>talkpet_anim0</item>
+  </string-array>
+</resources>

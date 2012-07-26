@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- auto-generated from src/sc2code/comm/thradd/thraddc.c -->
+<resources>
+  <string-array name="thradd_content">
+    <item>thradd</item>
+    <item>thraddash</item>
+  </string-array>
+  <integer-array name="thradd_anim0">
+    <item>8</item>
+    <item>4</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>66</item>
+    <item>66</item>
+    <item>16</item>
+  </integer-array>
+  <integer-array name="thradd_anim1">
+    <item>12</item>
+    <item>9</item>
+    <item>2</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="thradd_anim2">
+    <item>21</item>
+    <item>6</item>
+    <item>1</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="thradd_anim3">
+    <item>27</item>
+    <item>3</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>16</item>
+  </integer-array>
+  <integer-array name="thradd_anim4">
+    <item>30</item>
+    <item>12</item>
+    <item>10</item>
+    <item>83</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>1000</item>
+    <item>41</item>
+  </integer-array>
+  <integer-array name="thradd_anim5">
+    <item>42</item>
+    <item>5</item>
+    <item>4</item>
+    <item>100</item>
+    <item>33</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>80</item>
+  </integer-array>
+  <integer-array name="thradd_anim6">
+    <item>47</item>
+    <item>5</item>
+    <item>4</item>
+    <item>100</item>
+    <item>33</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>32</item>
+  </integer-array>
+  <integer-array name="thradd_anim7">
+    <item>52</item>
+    <item>4</item>
+    <item>1</item>
+    <item>50</item>
+    <item>0</item>
+    <item>50</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <string-array name="thradd">
+    <item>thradd_content</item>
+    <item>thradd_anim7</item>
+    <item>thradd_anim6</item>
+    <item>thradd_anim5</item>
+    <item>thradd_anim4</item>
+    <item>thradd_anim3</item>
+    <item>thradd_anim2</item>
+    <item>thradd_anim1</item>
+    <item>thradd_anim0</item>
+  </string-array>
+</resources>
