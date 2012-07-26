@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.io.*;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +93,7 @@ public class FileChooser extends ListActivity {
 
 	private void fill(File[] files) {
 		this.directoryEntries.clear();
+		Arrays.sort(files);
 
 		try {
 			Thread.sleep(10);

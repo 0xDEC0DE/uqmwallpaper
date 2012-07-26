@@ -121,10 +121,7 @@ public class Content {
 	throws IOException {
 		ZipEntry entry = zipfile.getEntry(file);
 		byte[] buffer = new byte[(int) entry.getSize()];
-
-		// System.err.println("DEBUG: read " +
-		zipfile.getInputStream(entry).read(buffer);
-		//	+ " bytes from zipfile");
+		new DataInputStream(zipfile.getInputStream(entry)).readFully(buffer);
 
 		return buffer;
 	}
