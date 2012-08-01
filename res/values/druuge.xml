@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- These values taken from The Ur-Quan Masters sources -->
-
+<!-- auto-generated from src/sc2code/comm/druuge/druugec.c -->
 <resources>
   <string-array name="druuge_content">
     <item>druuge</item>
   </string-array>
-  <integer-array name="druuge_anim1">
+  <integer-array name="druuge_anim0">
     <item>5</item>
     <item>4</item>
     <item>2</item>
@@ -16,7 +14,7 @@
     <item>0</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="druuge_anim2">
+  <integer-array name="druuge_anim1">
     <item>9</item>
     <item>4</item>
     <item>2</item>
@@ -26,7 +24,7 @@
     <item>0</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="druuge_anim3">
+  <integer-array name="druuge_anim2">
     <item>13</item>
     <item>6</item>
     <item>2</item>
@@ -36,7 +34,7 @@
     <item>0</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="druuge_anim4">
+  <integer-array name="druuge_anim3">
     <item>19</item>
     <item>3</item>
     <item>2</item>
@@ -46,7 +44,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="druuge_anim5">
+  <integer-array name="druuge_anim4">
     <item>22</item>
     <item>3</item>
     <item>1</item>
@@ -56,7 +54,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="druuge_anim6">
+  <integer-array name="druuge_anim5">
     <item>25</item>
     <item>3</item>
     <item>1</item>
@@ -66,7 +64,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="druuge_anim7">
+  <integer-array name="druuge_anim6">
     <item>28</item>
     <item>3</item>
     <item>1</item>
@@ -76,7 +74,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="druuge_anim8">
+  <integer-array name="druuge_anim7">
     <item>31</item>
     <item>2</item>
     <item>2</item>
@@ -86,7 +84,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="druuge_anim9">
+  <integer-array name="druuge_anim8">
     <item>33</item>
     <item>7</item>
     <item>10</item>
@@ -96,7 +94,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="druuge_anim10">
+  <integer-array name="druuge_anim9">
     <item>40</item>
     <item>4</item>
     <item>2</item>
@@ -106,7 +104,7 @@
     <item>0</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="druuge_anim11">
+  <integer-array name="druuge_anim10">
     <item>44</item>
     <item>4</item>
     <item>2</item>
@@ -118,16 +116,16 @@
   </integer-array>
   <string-array name="druuge">
     <item>druuge_content</item>
-    <item>druuge_anim1</item>
-    <item>druuge_anim2</item>
-    <item>druuge_anim3</item>
-    <item>druuge_anim4</item>
-    <item>druuge_anim5</item>
-    <item>druuge_anim6</item>
-    <item>druuge_anim7</item>
-    <item>druuge_anim8</item>
-    <item>druuge_anim9</item>
     <item>druuge_anim10</item>
-    <item>druuge_anim11</item>
+    <item>druuge_anim9</item>
+    <item>druuge_anim8</item>
+    <item>druuge_anim7</item>
+    <item>druuge_anim6</item>
+    <item>druuge_anim5</item>
+    <item>druuge_anim4</item>
+    <item>druuge_anim3</item>
+    <item>druuge_anim2</item>
+    <item>druuge_anim1</item>
+    <item>druuge_anim0</item>
   </string-array>
 </resources>

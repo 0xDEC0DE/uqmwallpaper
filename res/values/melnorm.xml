@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- These values taken from The Ur-Quan Masters sources -->
-
+<!-- auto-generated from src/sc2code/comm/melnorm/melnorm.c -->
 <resources>
   <string-array name="melnorm_content">
     <item>melnorm</item>
     <item>melnorme</item>
   </string-array>
-  <integer-array name="melnorm_anim1">
+  <integer-array name="melnorm_anim0">
     <item>6</item>
     <item>5</item>
     <item>4</item>
@@ -17,7 +15,7 @@
     <item>4000</item>
     <item>2</item>
   </integer-array>
-  <integer-array name="melnorm_anim2">
+  <integer-array name="melnorm_anim1">
     <item>11</item>
     <item>9</item>
     <item>4</item>
@@ -27,7 +25,7 @@
     <item>4000</item>
     <item>1</item>
   </integer-array>
-  <integer-array name="melnorm_anim3">
+  <integer-array name="melnorm_anim2">
     <item>20</item>
     <item>2</item>
     <item>4</item>
@@ -37,7 +35,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="melnorm_anim4">
+  <integer-array name="melnorm_anim3">
     <item>22</item>
     <item>2</item>
     <item>4</item>
@@ -49,9 +47,9 @@
   </integer-array>
   <string-array name="melnorm">
     <item>melnorm_content</item>
-    <item>melnorm_anim1</item>
-    <item>melnorm_anim2</item>
     <item>melnorm_anim3</item>
-    <item>melnorm_anim4</item>
+    <item>melnorm_anim2</item>
+    <item>melnorm_anim1</item>
+    <item>melnorm_anim0</item>
   </string-array>
 </resources>

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- These values taken from The Ur-Quan Masters sources -->
-
+<!-- auto-generated from src/sc2code/comm/urquan/urquanc.c -->
 <resources>
   <string-array name="urquan_content">
     <item>urquan</item>
   </string-array>
-  <integer-array name="urquan_anim1">
+  <integer-array name="urquan_anim0">
     <item>7</item>
     <item>6</item>
     <item>2</item>
@@ -16,7 +14,7 @@
     <item>0</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="urquan_anim2">
+  <integer-array name="urquan_anim1">
     <item>13</item>
     <item>3</item>
     <item>4</item>
@@ -26,7 +24,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="urquan_anim3">
+  <integer-array name="urquan_anim2">
     <item>16</item>
     <item>3</item>
     <item>4</item>
@@ -36,7 +34,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="urquan_anim4">
+  <integer-array name="urquan_anim3">
     <item>19</item>
     <item>3</item>
     <item>4</item>
@@ -46,7 +44,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="urquan_anim5">
+  <integer-array name="urquan_anim4">
     <item>22</item>
     <item>7</item>
     <item>2</item>
@@ -56,7 +54,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="urquan_anim6">
+  <integer-array name="urquan_anim5">
     <item>29</item>
     <item>7</item>
     <item>2</item>
@@ -66,7 +64,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="urquan_anim7">
+  <integer-array name="urquan_anim6">
     <item>36</item>
     <item>8</item>
     <item>2</item>
@@ -78,12 +76,12 @@
   </integer-array>
   <string-array name="urquan">
     <item>urquan_content</item>
-    <item>urquan_anim1</item>
-    <item>urquan_anim2</item>
-    <item>urquan_anim3</item>
-    <item>urquan_anim4</item>
-    <item>urquan_anim5</item>
     <item>urquan_anim6</item>
-    <item>urquan_anim7</item>
+    <item>urquan_anim5</item>
+    <item>urquan_anim4</item>
+    <item>urquan_anim3</item>
+    <item>urquan_anim2</item>
+    <item>urquan_anim1</item>
+    <item>urquan_anim0</item>
   </string-array>
 </resources>

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- These values taken from The Ur-Quan Masters sources -->
-
+<!-- auto-generated from src/sc2code/comm/slyhome/slyhome.c -->
 <resources>
   <string-array name="slyhome_content">
     <item>slyhome</item>
   </string-array>
-  <integer-array name="slyhome_anim1">
+  <integer-array name="slyhome_anim0">
     <item>0</item>
     <item>5</item>
     <item>17</item>
@@ -16,7 +14,7 @@
     <item>625</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="slyhome_anim2">
+  <integer-array name="slyhome_anim1">
     <item>1</item>
     <item>5</item>
     <item>4</item>
@@ -26,7 +24,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="slyhome_anim3">
+  <integer-array name="slyhome_anim2">
     <item>6</item>
     <item>5</item>
     <item>4</item>
@@ -36,7 +34,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="slyhome_anim4">
+  <integer-array name="slyhome_anim3">
     <item>11</item>
     <item>5</item>
     <item>4</item>
@@ -46,7 +44,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="slyhome_anim5">
+  <integer-array name="slyhome_anim4">
     <item>16</item>
     <item>6</item>
     <item>4</item>
@@ -56,7 +54,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="slyhome_anim6">
+  <integer-array name="slyhome_anim5">
     <item>22</item>
     <item>8</item>
     <item>2</item>
@@ -66,7 +64,7 @@
     <item>0</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="slyhome_anim7">
+  <integer-array name="slyhome_anim6">
     <item>30</item>
     <item>9</item>
     <item>2</item>
@@ -76,7 +74,7 @@
     <item>3000</item>
     <item>768</item>
   </integer-array>
-  <integer-array name="slyhome_anim8">
+  <integer-array name="slyhome_anim7">
     <item>39</item>
     <item>4</item>
     <item>2</item>
@@ -86,7 +84,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="slyhome_anim9">
+  <integer-array name="slyhome_anim8">
     <item>43</item>
     <item>5</item>
     <item>2</item>
@@ -96,7 +94,7 @@
     <item>3000</item>
     <item>64</item>
   </integer-array>
-  <integer-array name="slyhome_anim10">
+  <integer-array name="slyhome_anim9">
     <item>48</item>
     <item>6</item>
     <item>2</item>
@@ -106,7 +104,7 @@
     <item>3000</item>
     <item>64</item>
   </integer-array>
-  <integer-array name="slyhome_anim11">
+  <integer-array name="slyhome_anim10">
     <item>54</item>
     <item>6</item>
     <item>2</item>
@@ -116,7 +114,7 @@
     <item>3000</item>
     <item>4096</item>
   </integer-array>
-  <integer-array name="slyhome_anim12">
+  <integer-array name="slyhome_anim11">
     <item>60</item>
     <item>7</item>
     <item>2</item>
@@ -126,7 +124,7 @@
     <item>3000</item>
     <item>4096</item>
   </integer-array>
-  <integer-array name="slyhome_anim13">
+  <integer-array name="slyhome_anim12">
     <item>67</item>
     <item>8</item>
     <item>2</item>
@@ -138,18 +136,18 @@
   </integer-array>
   <string-array name="slyhome">
     <item>slyhome_content</item>
-    <item>slyhome_anim1</item>
-    <item>slyhome_anim2</item>
-    <item>slyhome_anim3</item>
-    <item>slyhome_anim4</item>
-    <item>slyhome_anim5</item>
-    <item>slyhome_anim6</item>
-    <item>slyhome_anim7</item>
-    <item>slyhome_anim8</item>
-    <item>slyhome_anim9</item>
-    <item>slyhome_anim10</item>
-    <item>slyhome_anim11</item>
     <item>slyhome_anim12</item>
-    <item>slyhome_anim13</item>
+    <item>slyhome_anim11</item>
+    <item>slyhome_anim10</item>
+    <item>slyhome_anim9</item>
+    <item>slyhome_anim8</item>
+    <item>slyhome_anim7</item>
+    <item>slyhome_anim6</item>
+    <item>slyhome_anim5</item>
+    <item>slyhome_anim4</item>
+    <item>slyhome_anim3</item>
+    <item>slyhome_anim2</item>
+    <item>slyhome_anim1</item>
+    <item>slyhome_anim0</item>
   </string-array>
 </resources>

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- These values taken from The Ur-Quan Masters sources -->
-
+<!-- auto-generated from src/sc2code/comm/slyland/slyland.c -->
 <resources>
   <string-array name="slyland_content">
     <item>slyland</item>
     <item>slylandro</item>
   </string-array>
-  <integer-array name="slyland_anim1">
+  <integer-array name="slyland_anim0">
     <item>1</item>
     <item>9</item>
     <item>2</item>
@@ -17,7 +15,7 @@
     <item>3000</item>
     <item>8</item>
   </integer-array>
-  <integer-array name="slyland_anim2">
+  <integer-array name="slyland_anim1">
     <item>10</item>
     <item>8</item>
     <item>2</item>
@@ -27,7 +25,7 @@
     <item>3000</item>
     <item>16</item>
   </integer-array>
-  <integer-array name="slyland_anim3">
+  <integer-array name="slyland_anim2">
     <item>18</item>
     <item>8</item>
     <item>2</item>
@@ -37,7 +35,7 @@
     <item>3000</item>
     <item>32</item>
   </integer-array>
-  <integer-array name="slyland_anim4">
+  <integer-array name="slyland_anim3">
     <item>26</item>
     <item>8</item>
     <item>2</item>
@@ -47,7 +45,7 @@
     <item>3000</item>
     <item>1</item>
   </integer-array>
-  <integer-array name="slyland_anim5">
+  <integer-array name="slyland_anim4">
     <item>34</item>
     <item>8</item>
     <item>2</item>
@@ -57,7 +55,7 @@
     <item>3000</item>
     <item>2</item>
   </integer-array>
-  <integer-array name="slyland_anim6">
+  <integer-array name="slyland_anim5">
     <item>42</item>
     <item>9</item>
     <item>2</item>
@@ -69,11 +67,11 @@
   </integer-array>
   <string-array name="slyland">
     <item>slyland_content</item>
-    <item>slyland_anim1</item>
-    <item>slyland_anim2</item>
-    <item>slyland_anim3</item>
-    <item>slyland_anim4</item>
     <item>slyland_anim5</item>
-    <item>slyland_anim6</item>
+    <item>slyland_anim4</item>
+    <item>slyland_anim3</item>
+    <item>slyland_anim2</item>
+    <item>slyland_anim1</item>
+    <item>slyland_anim0</item>
   </string-array>
 </resources>

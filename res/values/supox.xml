@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- These values taken from The Ur-Quan Masters sources -->
-
+<!-- auto-generated from src/sc2code/comm/supox/supoxc.c -->
 <resources>
   <string-array name="supox_content">
     <item>supox</item>
   </string-array>
-  <integer-array name="supox_anim1">
+  <integer-array name="supox_anim0">
     <item>4</item>
     <item>5</item>
     <item>12</item>
@@ -16,7 +14,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="supox_anim2">
+  <integer-array name="supox_anim1">
     <item>9</item>
     <item>10</item>
     <item>2</item>
@@ -26,7 +24,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="supox_anim3">
+  <integer-array name="supox_anim2">
     <item>19</item>
     <item>10</item>
     <item>2</item>
@@ -36,7 +34,7 @@
     <item>3000</item>
     <item>0</item>
   </integer-array>
-  <integer-array name="supox_anim4">
+  <integer-array name="supox_anim3">
     <item>29</item>
     <item>13</item>
     <item>2</item>
@@ -48,9 +46,9 @@
   </integer-array>
   <string-array name="supox">
     <item>supox_content</item>
-    <item>supox_anim1</item>
-    <item>supox_anim2</item>
     <item>supox_anim3</item>
-    <item>supox_anim4</item>
+    <item>supox_anim2</item>
+    <item>supox_anim1</item>
+    <item>supox_anim0</item>
   </string-array>
 </resources>
