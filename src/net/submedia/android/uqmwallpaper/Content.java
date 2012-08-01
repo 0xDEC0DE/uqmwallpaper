@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.zip.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 //------------------------------------------------------------------------
 // Content objects take the name if a zipfile and an alien race, and extract
@@ -29,7 +30,11 @@ import android.graphics.BitmapFactory;
 
 public class Content {
 
+	private static final String TAG = "UQMWallpaper.Content";
+
 	// class definitions for these types are at the end of the file
+	public enum Type { UQM, P6014; }
+	public Type type;
 	public List<Frame> frame;
 
 	// attempts to find the .ani file for the given alien_race, and loads all
@@ -39,10 +44,11 @@ public class Content {
 	// which unfortunately means tracking content changes upstream...
 	Content(String zipfile, String[] alien_races)
 	throws IOException {
+		this(zipfile); // validate content and set this.type as a side-effect
 		this.frame = new ArrayList<Frame>();
 		try {
 			ZipFile z = new ZipFile(zipfile);
-			String[] races = listFilesMatching(z, "comm/", ".ani");
+			String[] races = listFilesMatching(z, ".*comm/.*\\.ani");
 
 			for (String file : races) {
 				for (String alien_race : alien_races) {
@@ -68,26 +74,34 @@ public class Content {
 	}
 
 	// A stubbier constructor, just looks for .ani files and returns an empty
-	// object.  Used to determine if a given file is a valid content pack
+	// object.  Used to determine if a given file is a valid content pack, and
+	// its type.  Content packs don't really contain useful manifest
+	// information, though, so infer the type via "magic" filenames.  Ick.
 	Content(String zipfile)
 	throws IOException {
 		ZipFile z = new ZipFile(zipfile);
-		String[] races = listFilesMatching(z, "comm/", ".ani");
+		String[] races = listFilesMatching(z, ".*comm/(arilou|lurg)/.*\\.ani");
 		z.close();
 
 		if (races.length < 1)
 			throw new IOException("no content found");
+		else if (races.length < 2)
+			this.type = Type.UQM;
+		else
+			this.type = Type.P6014;
+
+		Log.d(TAG, "content pack " + zipfile + " is a valid content pack of type " + this.type);
 	}
 
 	private static String[]
-	listFilesMatching(ZipFile zipfile, String prefix, String suffix) {
+	listFilesMatching(ZipFile zipfile, String match) {
 		Enumeration entries = zipfile.entries();
 		List<String> files = new ArrayList<String>();
 
 		while(entries.hasMoreElements()) {
 			ZipEntry entry = (ZipEntry)entries.nextElement();
 			String name = entry.getName();
-			if (name.contains(prefix) && name.endsWith(suffix)) {
+			if (name.matches(match)) {
 				files.add(name);
 			}
 		}

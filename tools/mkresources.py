@@ -83,6 +83,9 @@ def main(input_file, temp_file):
 	# XML files, one per struct
 	#
 	for desc in descs:
+		if int(desc.init.children()[struct["NumAnimations"]][-1].value) < 1:
+			continue
+
 		_, fields = desc.init.children()[struct["AlienAmbientArray"]]
 		emit = Emit(fields)
 
