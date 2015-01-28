@@ -125,7 +125,7 @@ class Animation {
 		// scribble all the updates onto the canvas
 		for (int i = 0; i < this.frame.size(); i++) {
 			Frame f = this.frame.get(i);
-			int ActiveBit = 1 << i++;
+			int ActiveBit = 1 << i;
 
 			// but not yet...
 			if (f.Alarm > ElapsedTicks) {
