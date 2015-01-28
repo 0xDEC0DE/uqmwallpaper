@@ -24,6 +24,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Rect;
 import android.os.Environment;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
@@ -72,6 +73,7 @@ public class UQMWallpaper extends WallpaperService {
 		private SharedPreferences mPrefs;
 		private Animation mAnim;
 		private int mScaling = 2;
+		private Rect mRect = new Rect();
 
 		private final Runnable mDrawComms = new Runnable() {
 			public void run() {
@@ -227,31 +229,39 @@ public class UQMWallpaper extends WallpaperService {
 						c.drawText(getContext().getString(R.string.no_content1), w - 10, h - 10, p);
 						c.drawText(getContext().getString(R.string.no_content2), w + 10, h + 10, p);
 					} else {
-						/* Handle the differences based on the scaling type.
-						 * ternary operator abuse is a capital offense in some
-						 * countries...
-						 */
-						int width = (mScaling > 1) ? totalWidth : mWidth;
-						Bitmap b = (mScaling == 0) ?
-								Bitmap.createBitmap(mAnim.getFrame()) :
-								Bitmap.createScaledBitmap(mAnim.getFrame(), width, aspectHeight, true);
+						int x, y, w, h;
+						Bitmap b = mAnim.getFrame();
 
-						/* Types 0 and 1 have no "parallax effect", and as such
-						 * require no special handling.
-						 * Type 2 needs to position itself according to the
-						 * current screen offset, unless it's in preview mode
+						/*
+						 * Center the animation output on the screen, scaling
+						 * the image as needed.  In the case of scaling mode #2
+						 * (scale across all screens), show the true center in
+						 * "Preview Mode", and position it according to the
+						 * virtual screen offset otherwise.  This allows for
+						 * the "parallax effect" that some launchers support
 						 */
-						int x;
-						if (mScaling == 2) {
-							x = ((((this.isPreview()) ? mWidth : totalWidth) / 2) -
-									(b.getWidth() / 2)) + (this.isPreview() ? 0 : mOffset);
-						} else {
-							x = (mWidth / 2) - (b.getWidth() / 2);
-						}
-
-						int y = (mHeight / 2) - (b.getHeight() / 2);
 						if (b != null) {
-							c.drawBitmap(b, x, y, null);
+							switch (mScaling) {
+								case 1:
+									x = 0;
+									y = (mHeight / 2) - (aspectHeight / 2);
+									w = mWidth;
+									h = y + aspectHeight;
+									break;
+								case 2:
+									x = this.isPreview() ? ((mWidth / 2) - (totalWidth / 2)) : mOffset;
+									y = (mHeight / 2) - (aspectHeight / 2);
+									w = x + totalWidth;
+									h = y + aspectHeight;
+									break;
+								default:
+									x = (mWidth / 2) - (b.getWidth() / 2);
+									y = (mHeight / 2) - (b.getHeight() / 2);
+									w = x + b.getWidth();
+									h = y + b.getHeight();
+							}
+							mRect.set(x, y, w, h);
+							c.drawBitmap(b, null, mRect, null);
 						}
 						delay = mAnim.next_frame_delay;
 					}

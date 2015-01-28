@@ -118,13 +118,13 @@ class Animation {
 	public Bitmap getFrame() {
 		long CurTime = SystemClock.uptimeMillis();
 		long ElapsedTicks = CurTime - this.LastTime;
-		int i = 0;
 
 		this.next_frame_delay = 0x7FFFFFFF;
 		this.LastTime = CurTime;
 
 		// scribble all the updates onto the canvas
-		for (Frame f : this.frame) {
+		for (int i = 0; i < this.frame.size(); i++) {
+			Frame f = this.frame.get(i);
 			int ActiveBit = 1 << i++;
 
 			// but not yet...
