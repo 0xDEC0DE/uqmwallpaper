@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">The Ur-Quan Masters Live Wallpaper</string>
+    <string name="app_desc">Animations from The Ur-Quan Masters</string>
+    <string name="preferences_label">Settings</string>
+    <string name="app_settings">The Ur-Quan Masters Live Wallpaper Settings</string>
+    <string name="app_author">Nicolas Simonds</string>
+    <string name="alien_title">Alien</string>
+    <string name="alien_summary">Choose the alien to display</string>
+    <string name="scaling_title">Scale Wallpaper</string>
+    <string name="version_title">Application Version</string>
+    <string name="set_center">Scroll to set center</string>
+</resources>

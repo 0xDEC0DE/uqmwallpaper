@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ur-Quan Masters Fondo de Pantalla Animado</string>
+    <string name="app_desc">Las Animaciones de Ur-Quan Masters</string>
+    <string name="preferences_label">Ajustes</string>
+    <string name="app_settings">Configuración de Ur-Quan Masters Fondo de Pantalla Animado</string>
+    <string name="app_author">Nicolas Simonds</string>
+    <string name="alien_title">Extraterrestre</string>
+    <string name="alien_summary">Elegir el Extraterrestre para Mostrar</string>
+    <string name="scaling_title">Interpolar Fondo de Pantalla</string>
+    <string name="version_title">Versión de Aplicación</string>
+    <string name="set_center">Desplácese para establecer el centro</string>
+</resources>

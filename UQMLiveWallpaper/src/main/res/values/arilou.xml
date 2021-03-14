@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- auto-generated from src/sc2code/comm/arilou/arilouc.c -->
+<resources>
+  <string-array name="arilou_content">
+    <item>arilou</item>
+  </string-array>
+  <integer-array name="arilou_anim0">
+    <item>4</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>65538</item>
+  </integer-array>
+  <integer-array name="arilou_anim1">
+    <item>13</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>65537</item>
+  </integer-array>
+  <integer-array name="arilou_anim2">
+    <item>22</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>65536</item>
+  </integer-array>
+  <integer-array name="arilou_anim3">
+    <item>31</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>16</item>
+  </integer-array>
+  <integer-array name="arilou_anim4">
+    <item>40</item>
+    <item>10</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>8</item>
+  </integer-array>
+  <integer-array name="arilou_anim5">
+    <item>50</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>128</item>
+  </integer-array>
+  <integer-array name="arilou_anim6">
+    <item>59</item>
+    <item>8</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="arilou_anim7">
+    <item>67</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>32</item>
+  </integer-array>
+  <integer-array name="arilou_anim8">
+    <item>76</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>512</item>
+  </integer-array>
+  <integer-array name="arilou_anim9">
+    <item>85</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>256</item>
+  </integer-array>
+  <integer-array name="arilou_anim10">
+    <item>94</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="arilou_anim11">
+    <item>103</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>8192</item>
+  </integer-array>
+  <integer-array name="arilou_anim12">
+    <item>112</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="arilou_anim13">
+    <item>121</item>
+    <item>8</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>2048</item>
+  </integer-array>
+  <integer-array name="arilou_anim14">
+    <item>129</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>32768</item>
+  </integer-array>
+  <integer-array name="arilou_anim15">
+    <item>138</item>
+    <item>8</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>16384</item>
+  </integer-array>
+  <integer-array name="arilou_anim16">
+    <item>146</item>
+    <item>9</item>
+    <item>2</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>7</item>
+  </integer-array>
+  <integer-array name="arilou_anim17">
+    <item>155</item>
+    <item>2</item>
+    <item>2</item>
+    <item>66</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="arilou_anim18">
+    <item>157</item>
+    <item>2</item>
+    <item>2</item>
+    <item>66</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="arilou_anim19">
+    <item>159</item>
+    <item>4</item>
+    <item>10</item>
+    <item>83</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <string-array name="arilou">
+    <item>arilou_content</item>
+    <item>arilou_anim19</item>
+    <item>arilou_anim18</item>
+    <item>arilou_anim17</item>
+    <item>arilou_anim16</item>
+    <item>arilou_anim15</item>
+    <item>arilou_anim14</item>
+    <item>arilou_anim13</item>
+    <item>arilou_anim12</item>
+    <item>arilou_anim11</item>
+    <item>arilou_anim10</item>
+    <item>arilou_anim9</item>
+    <item>arilou_anim8</item>
+    <item>arilou_anim7</item>
+    <item>arilou_anim6</item>
+    <item>arilou_anim5</item>
+    <item>arilou_anim4</item>
+    <item>arilou_anim3</item>
+    <item>arilou_anim2</item>
+    <item>arilou_anim1</item>
+    <item>arilou_anim0</item>
+  </string-array>
+</resources>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- auto-generated from src/sc2code/comm/yehat/yehatc.c -->
+<resources>
+  <string-array name="yehat_content">
+    <item>yehat</item>
+  </string-array>
+  <integer-array name="yehat_anim0">
+    <item>4</item>
+    <item>3</item>
+    <item>12</item>
+    <item>100</item>
+    <item>100</item>
+    <item>250</item>
+    <item>500</item>
+    <item>192</item>
+  </integer-array>
+  <integer-array name="yehat_anim1">
+    <item>7</item>
+    <item>3</item>
+    <item>12</item>
+    <item>100</item>
+    <item>100</item>
+    <item>250</item>
+    <item>500</item>
+    <item>192</item>
+  </integer-array>
+  <integer-array name="yehat_anim2">
+    <item>10</item>
+    <item>3</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>16400</item>
+  </integer-array>
+  <integer-array name="yehat_anim3">
+    <item>13</item>
+    <item>3</item>
+    <item>4</item>
+    <item>50</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>32</item>
+  </integer-array>
+  <integer-array name="yehat_anim4">
+    <item>16</item>
+    <item>5</item>
+    <item>4</item>
+    <item>66</item>
+    <item>66</item>
+    <item>6000</item>
+    <item>3000</item>
+    <item>16388</item>
+  </integer-array>
+  <integer-array name="yehat_anim5">
+    <item>21</item>
+    <item>5</item>
+    <item>4</item>
+    <item>66</item>
+    <item>66</item>
+    <item>6000</item>
+    <item>3000</item>
+    <item>8</item>
+  </integer-array>
+  <integer-array name="yehat_anim6">
+    <item>26</item>
+    <item>2</item>
+    <item>12</item>
+    <item>66</item>
+    <item>66</item>
+    <item>6000</item>
+    <item>3000</item>
+    <item>3</item>
+  </integer-array>
+  <integer-array name="yehat_anim7">
+    <item>28</item>
+    <item>2</item>
+    <item>12</item>
+    <item>66</item>
+    <item>66</item>
+    <item>6000</item>
+    <item>3000</item>
+    <item>3</item>
+  </integer-array>
+  <integer-array name="yehat_anim8">
+    <item>30</item>
+    <item>3</item>
+    <item>4</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="yehat_anim9">
+    <item>33</item>
+    <item>3</item>
+    <item>4</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="yehat_anim10">
+    <item>36</item>
+    <item>3</item>
+    <item>4</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="yehat_anim11">
+    <item>39</item>
+    <item>3</item>
+    <item>4</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="yehat_anim12">
+    <item>42</item>
+    <item>3</item>
+    <item>4</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="yehat_anim13">
+    <item>45</item>
+    <item>3</item>
+    <item>4</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>33</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="yehat_anim14">
+    <item>48</item>
+    <item>4</item>
+    <item>12</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>20</item>
+  </integer-array>
+  <string-array name="yehat">
+    <item>yehat_content</item>
+    <item>yehat_anim14</item>
+    <item>yehat_anim13</item>
+    <item>yehat_anim12</item>
+    <item>yehat_anim11</item>
+    <item>yehat_anim10</item>
+    <item>yehat_anim9</item>
+    <item>yehat_anim8</item>
+    <item>yehat_anim7</item>
+    <item>yehat_anim6</item>
+    <item>yehat_anim5</item>
+    <item>yehat_anim4</item>
+    <item>yehat_anim3</item>
+    <item>yehat_anim2</item>
+    <item>yehat_anim1</item>
+    <item>yehat_anim0</item>
+  </string-array>
+</resources>

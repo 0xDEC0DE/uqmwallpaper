@@ -1,0 +1,10 @@
+bin
+gen
+libs
+local.properties
+proguard-project.txt
+.gradle
+.idea
+UQMLiveWallpaper/build
+gradle
+UQMLiveWallpaper/src/main/assets

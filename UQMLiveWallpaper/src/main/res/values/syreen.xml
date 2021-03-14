@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- auto-generated from src/sc2code/comm/syreen/syreenc.c -->
+<resources>
+  <string-array name="syreen_content">
+    <item>syreen</item>
+  </string-array>
+  <integer-array name="syreen_anim0">
+    <item>5</item>
+    <item>2</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="syreen_anim1">
+    <item>7</item>
+    <item>2</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="syreen_anim2">
+    <item>9</item>
+    <item>2</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="syreen_anim3">
+    <item>11</item>
+    <item>2</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="syreen_anim4">
+    <item>13</item>
+    <item>2</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="syreen_anim5">
+    <item>15</item>
+    <item>2</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>4096</item>
+  </integer-array>
+  <integer-array name="syreen_anim6">
+    <item>17</item>
+    <item>2</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="syreen_anim7">
+    <item>19</item>
+    <item>2</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>8192</item>
+  </integer-array>
+  <integer-array name="syreen_anim8">
+    <item>21</item>
+    <item>6</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="syreen_anim9">
+    <item>27</item>
+    <item>4</item>
+    <item>4</item>
+    <item>66</item>
+    <item>66</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>16384</item>
+  </integer-array>
+  <integer-array name="syreen_anim10">
+    <item>31</item>
+    <item>6</item>
+    <item>2</item>
+    <item>66</item>
+    <item>66</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="syreen_anim11">
+    <item>37</item>
+    <item>4</item>
+    <item>1</item>
+    <item>66</item>
+    <item>66</item>
+    <item>66</item>
+    <item>66</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="syreen_anim12">
+    <item>41</item>
+    <item>3</item>
+    <item>4</item>
+    <item>100</item>
+    <item>66</item>
+    <item>10000</item>
+    <item>3000</item>
+    <item>32</item>
+  </integer-array>
+  <integer-array name="syreen_anim13">
+    <item>44</item>
+    <item>4</item>
+    <item>12</item>
+    <item>166</item>
+    <item>0</item>
+    <item>3000</item>
+    <item>1000</item>
+    <item>16512</item>
+  </integer-array>
+  <integer-array name="syreen_anim14">
+    <item>48</item>
+    <item>3</item>
+    <item>12</item>
+    <item>133</item>
+    <item>66</item>
+    <item>10000</item>
+    <item>1000</item>
+    <item>8704</item>
+  </integer-array>
+  <string-array name="syreen">
+    <item>syreen_content</item>
+    <item>syreen_anim14</item>
+    <item>syreen_anim13</item>
+    <item>syreen_anim12</item>
+    <item>syreen_anim11</item>
+    <item>syreen_anim10</item>
+    <item>syreen_anim9</item>
+    <item>syreen_anim8</item>
+    <item>syreen_anim7</item>
+    <item>syreen_anim6</item>
+    <item>syreen_anim5</item>
+    <item>syreen_anim4</item>
+    <item>syreen_anim3</item>
+    <item>syreen_anim2</item>
+    <item>syreen_anim1</item>
+    <item>syreen_anim0</item>
+  </string-array>
+</resources>

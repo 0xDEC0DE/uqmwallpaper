@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- auto-generated from src/sc2code/comm/zoqfot/zoqfotc.c -->
+<resources>
+  <string-array name="zoqfot_content">
+    <item>zoqfot</item>
+    <item>zoqfotpik</item>
+  </string-array>
+  <integer-array name="zoqfot_anim0">
+    <item>1</item>
+    <item>4</item>
+    <item>12</item>
+    <item>41</item>
+    <item>0</item>
+    <item>0</item>
+    <item>10000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="zoqfot_anim1">
+    <item>5</item>
+    <item>5</item>
+    <item>2</item>
+    <item>58</item>
+    <item>0</item>
+    <item>2000</item>
+    <item>0</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="zoqfot_anim2">
+    <item>10</item>
+    <item>8</item>
+    <item>2</item>
+    <item>66</item>
+    <item>0</item>
+    <item>0</item>
+    <item>10000</item>
+    <item>0</item>
+  </integer-array>
+  <string-array name="zoqfot">
+    <item>zoqfot_content</item>
+    <item>zoqfot_anim2</item>
+    <item>zoqfot_anim1</item>
+    <item>zoqfot_anim0</item>
+  </string-array>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- auto-generated from src/sc2code/comm/pkunk/pkunkc.c -->
+<resources>
+  <string-array name="pkunk_content">
+    <item>pkunk</item>
+  </string-array>
+  <integer-array name="pkunk_anim0">
+    <item>3</item>
+    <item>4</item>
+    <item>10</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>0</item>
+  </integer-array>
+  <integer-array name="pkunk_anim1">
+    <item>7</item>
+    <item>4</item>
+    <item>12</item>
+    <item>100</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>4</item>
+  </integer-array>
+  <integer-array name="pkunk_anim2">
+    <item>11</item>
+    <item>3</item>
+    <item>12</item>
+    <item>33</item>
+    <item>0</item>
+    <item>1000</item>
+    <item>3000</item>
+    <item>2</item>
+  </integer-array>
+  <string-array name="pkunk">
+    <item>pkunk_content</item>
+    <item>pkunk_anim2</item>
+    <item>pkunk_anim1</item>
+    <item>pkunk_anim0</item>
+  </string-array>
+</resources>
