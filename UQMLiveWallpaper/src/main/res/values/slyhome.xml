@@ -3,6 +3,7 @@
 <resources>
   <string-array name="slyhome_content">
     <item>slyhome</item>
+    <item>slylandro</item>
   </string-array>
   <integer-array name="slyhome_anim0">
     <item>0</item>

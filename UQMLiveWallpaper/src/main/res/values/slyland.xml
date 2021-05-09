@@ -2,6 +2,7 @@
 <!-- auto-generated from src/sc2code/comm/slyland/slyland.c -->
 <resources>
   <string-array name="slyland_content">
+    <item>probe</item>
     <item>slyland</item>
     <item>slylandro</item>
   </string-array>

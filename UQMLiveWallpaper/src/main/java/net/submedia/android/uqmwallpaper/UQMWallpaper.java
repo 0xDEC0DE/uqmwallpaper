@@ -50,7 +50,6 @@ public class UQMWallpaper
     private final Handler mHandler = new Handler();
     private Context mContext;
     private Width totalWidth;
-    private int totalHeight;
     private int mUserOffset;
 
     @Override
@@ -60,7 +59,8 @@ public class UQMWallpaper
         // what odd method names for these...
         WallpaperManager wm = WallpaperManager.getInstance(mContext);
         totalWidth = new Width(wm.getDesiredMinimumWidth());
-        totalHeight = wm.getDesiredMinimumHeight();
+        // this may need to be up-sold to a class variable
+        int totalHeight = wm.getDesiredMinimumHeight();
         Log.d(TAG, String.format("totalWidth: %04d totalHeight: %04d", totalWidth.full, totalHeight));
 
     }
@@ -75,7 +75,7 @@ public class UQMWallpaper
         return new CommsEngine();
     }
 
-    private class Width {
+    private static class Width {
         public int full;
         public int half;
 
@@ -100,16 +100,12 @@ public class UQMWallpaper
         private Animation mAnim;
         private int mScaling = 2;
         private boolean mVisible;
-        private final Runnable mDrawComms = new Runnable() {
-            public void run() {
-                drawFrame();
-            }
-        };
+        private final Runnable mDrawComms = this::drawFrame;
 
         CommsEngine() {
             mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             mPrefs.registerOnSharedPreferenceChangeListener(this);
-            onSharedPreferenceChanged(mPrefs, null);
+            onSharedPreferenceChanged(mPrefs, OFFSET_PREF);
             Log.v(TAG, "started");
         }
 
@@ -243,7 +239,7 @@ public class UQMWallpaper
                 default:
                     return;
             }
-            Log.d(TAG, String.format("mAnchor (%04d) moffset(%04d)", mAnchor, mOffset));
+            Log.d(TAG, String.format("mAnchor (%04d) mOffset(%04d)", mAnchor, mOffset));
         }
 
         /*
