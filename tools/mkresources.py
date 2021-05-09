@@ -96,7 +96,7 @@ def main(input_file, temp_file):
 			outfh = open(_.expand(r"%s\1.xml" % race), "w")
 		else:
 			outfh = open(r"%s.xml" % race, "w")
-		print >> outfh, "<!-- auto-generated from %s -->" % input_file
+		print("<!-- auto-generated from %s -->" % input_file, file=outfh)
 
 		output = xml.Element("resources")
 		# used for populating a lookup table array later
@@ -142,7 +142,7 @@ def main(input_file, temp_file):
 		# The money shot
 		xml.ElementTree(output).write(outfh, encoding="utf-8")
 		outfh.close()
-		print "wrote %s" % outfh.name
+		print("wrote %s" % outfh.name)
 
 		# Post-process through the shell command:
 		# "xmllint --format --encode utf-8" for pretty-printing
@@ -273,7 +273,7 @@ class Emit(object):
 
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
-		print >> sys.stderr, __doc__
+		print(__doc__, file=sys.stderr)
 		sys.exit(1)
 
 	tmpf, tmp = tempfile.mkstemp(suffix=".h", dir=".")

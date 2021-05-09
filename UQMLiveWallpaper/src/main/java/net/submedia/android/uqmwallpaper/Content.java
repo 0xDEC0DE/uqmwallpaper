@@ -210,15 +210,15 @@ public class Content {
             }
 
             Hotspot(String x, String y) {
-                this((int) Integer.parseInt(x), (int) Integer.parseInt(y));
+                this(Integer.parseInt(x), Integer.parseInt(y));
             }
 
             Hotspot(int x, String y) {
-                this(x, (int) Integer.parseInt(y));
+                this(x, Integer.parseInt(y));
             }
 
             Hotspot(String x, int y) {
-                this((int) Integer.parseInt(x), y);
+                this(Integer.parseInt(x), y);
             }
 
             @Override

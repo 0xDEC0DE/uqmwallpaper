@@ -3,6 +3,7 @@
 <resources>
   <string-array name="spahome_content">
     <item>spahome</item>
+    <item>safeones</item>
   </string-array>
   <integer-array name="spahome_anim0">
     <item>1</item>

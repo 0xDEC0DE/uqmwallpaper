@@ -44,7 +44,8 @@ public class SettingsFragment
         mAlien = findPreference(ALIEN_RACE);
         mScaling = findPreference(SCALING);
         Preference mVersion = findPreference(VERSION);
-        mVersion.setSummary(getVersionName(getContext()));
+        if (mVersion != null)
+            mVersion.setSummary(getVersionName(getContext()));
 
         String buf;
         prefs = getPreferenceManager().getSharedPreferences();
