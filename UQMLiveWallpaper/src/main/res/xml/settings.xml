@@ -15,6 +15,11 @@
         android:entryValues="@array/scaling"
         android:key="scaling"
         android:title="@string/scaling_title" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="fillframe"
+        android:title="Fill Frame"
+        />
     <Preference
         android:key="version"
         android:title="@string/version_title" />
