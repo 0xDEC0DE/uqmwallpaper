@@ -27,6 +27,10 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.service.wallpaper.WallpaperService;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -91,16 +95,20 @@ public class UQMWallpaper
 
         private final SharedPreferences mPrefs;
         private final Rect mRect = new Rect();
+        private final Rect bgRect = new Rect();
         private final Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
         private int mAnchor = 0;
         private int mOffset = 0;
-        private int aspectHeight;
+        private int mAspect;
         private int mWidth;
         private int mHeight;
         private Animation mAnim;
         private int mScaling = 2;
+        private boolean mFillFrame = false;
         private boolean mVisible;
         private final Runnable mDrawComms = this::drawFrame;
+        private final RenderScript rs = RenderScript.create(mContext);
+        private final ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
 
         CommsEngine() {
             mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -110,8 +118,7 @@ public class UQMWallpaper
         }
 
         private void setAspect(Bitmap b) {
-            int aspect = (((mScaling > 1) ? totalWidth.full : mWidth) * 10000) / b.getWidth();
-            aspectHeight = (b.getHeight() * aspect) / 10000;
+            mAspect = (((mScaling > 1) ? totalWidth.full : mWidth) * 10000) / b.getWidth();
         }
 
         @Override
@@ -121,12 +128,17 @@ public class UQMWallpaper
                 // TODO(nic): get the getString() defaults from the settings.xml defaults
                 if (key == null) return;
                 switch (key) {
-                    case "race":
-                        mAnim = new Animation(prefs.getString("race", "urquan"), mContext);
+                    case SettingsFragment.ALIEN_RACE:
+                        mAnim = new Animation(prefs.getString(SettingsFragment.ALIEN_RACE, "urquan"), mContext);
                         Log.d(TAG, mAnim.toString());
                         break;
-                    case "scaling":
-                        mScaling = Integer.parseInt(prefs.getString("scaling", "2"));
+                    case SettingsFragment.SCALING:
+                        // NOTE(nic): saving this preference as a string and converting it to an int makes
+                        // manipulating the Settings way less complicated.
+                        mScaling = Integer.parseInt(prefs.getString(SettingsFragment.SCALING, "2"));
+                        break;
+                    case SettingsFragment.FILL_FRAME:
+                        mFillFrame = prefs.getBoolean(SettingsFragment.FILL_FRAME, false);
                         break;
                     case OFFSET_PREF:
                         mUserOffset = prefs.getInt(OFFSET_PREF, 0);
@@ -135,7 +147,8 @@ public class UQMWallpaper
                         Log.d(TAG, "Unknown key changed: " + key);
                         break;
                 }
-                setAspect(mAnim.getFrame());
+                if (mAnim != null)
+                    setAspect(mAnim.getFrame());
             } catch (Exception e) {
                 Log.w(TAG, e.toString());
                 for (StackTraceElement t : e.getStackTrace()) {
@@ -159,10 +172,30 @@ public class UQMWallpaper
         @Override
         public void onVisibilityChanged(boolean visible) {
             mVisible = visible;
-            if (visible) {
+            if (visible)
                 drawFrame();
-            } else {
+            else
                 mHandler.removeCallbacks(mDrawComms);
+        }
+
+        private Animation init_mAnim() {
+            // Failure to load these prefs should just fall back to defaults.
+            try {
+                mScaling = Integer.parseInt(mPrefs.getString(SettingsFragment.SCALING, "2"));
+                mFillFrame = mPrefs.getBoolean(SettingsFragment.FILL_FRAME, false);
+            } catch (Exception e) {
+                mScaling = 2;
+                mFillFrame = false;
+            }
+            // Otherwise, pitch a fit
+            try {
+                return new Animation(mPrefs.getString(SettingsFragment.ALIEN_RACE, "urquan"), mContext);
+            } catch (Exception e) {
+                Log.w(TAG, e.toString());
+                for (StackTraceElement t : e.getStackTrace()) {
+                    Log.d(TAG, t.toString());
+                }
+                return null;
             }
         }
 
@@ -174,23 +207,10 @@ public class UQMWallpaper
             mOffset += mUserOffset;
             Log.d(TAG, String.format(Locale.US, "width(%04d) height(%04d) offset(%04d)", mWidth, mHeight, mOffset));
 
-            if (mAnim == null) {
-                try {
-                    // TODO(nic): get the getString() defaults from the settings.xml defaults
-                    mScaling = Integer.parseInt(mPrefs.getString("scaling", "2"));
-                    mAnim = new Animation(mPrefs.getString("race", "urquan"), mContext);
-                    setAspect(mAnim.getFrame());
-                } catch (Exception e) {
-                    Log.w(TAG, e.toString());
-                    for (StackTraceElement t : e.getStackTrace()) {
-                        Log.d(TAG, t.toString());
-                    }
-                    mAnim = null;
-                }
-            } else {
+            if (mAnim == null)
+                mAnim = init_mAnim();
+            if (mAnim != null)
                 setAspect(mAnim.getFrame());
-            }
-
             drawFrame();
         }
 
@@ -242,6 +262,22 @@ public class UQMWallpaper
             Log.d(TAG, String.format("mAnchor (%04d) mOffset(%04d)", mAnchor, mOffset));
         }
 
+        private Bitmap blur(Bitmap inputBitmap) {
+            Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
+            // The input bitmaps are not multiples of 16 pixels wide, which causes zillions of warnings
+            // on API version 18 and up unless these Allocations are created long-form with a minimum of flags
+            Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_GRAPHICS_TEXTURE);
+            Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_GRAPHICS_TEXTURE);
+            theIntrinsic.setRadius(2.25f);
+            theIntrinsic.setInput(tmpIn);
+            theIntrinsic.forEach(tmpOut);
+            tmpOut.copyTo(outputBitmap);
+
+            tmpIn.destroy();
+            tmpOut.destroy();
+            return outputBitmap;
+        }
+
         /*
          * Draw one frame of the animation.  You can do any drawing you want in
          * here.
@@ -269,6 +305,7 @@ public class UQMWallpaper
                          * launchers support
                          */
                         if (b != null) {
+                            int aspectHeight = (b.getHeight() * mAspect) / 10000;
                             switch (mScaling) {
                                 case 1:
                                     x = 0;
@@ -289,6 +326,18 @@ public class UQMWallpaper
                                     h = y + b.getHeight();
                             }
                             mRect.set(x, y, w, h);
+                            if (mFillFrame) {
+                                mPaint.setAlpha(0x7F);
+                                bgRect.set(mOffset, 0, mOffset + totalWidth.full, mHeight);
+                                if (mScaling == 2) {
+                                    int aspectWidth = (totalWidth.full * mAspect) / 200000;
+                                    bgRect.left -= aspectWidth;
+                                    bgRect.right += aspectWidth;
+                                }
+                                c.drawBitmap(blur(b), null, bgRect, mPaint);
+                                mPaint.setMaskFilter(null);
+                                mPaint.setAlpha(0xFF);
+                            }
                             c.drawBitmap(b, null, mRect, mPaint);
                             if (this.isPreview() && mScaling == 2) {
                                 w = mWidth / 2;

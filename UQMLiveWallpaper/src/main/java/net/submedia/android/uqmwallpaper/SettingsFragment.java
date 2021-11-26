@@ -30,10 +30,11 @@ public class SettingsFragment
         extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = "UQMWallpaper.Settings";
-    private static final String ALIEN_RACE = "race";
-    private static final String SCALING = "scaling";
-    private static final String VERSION = "version";
+    private static final String TAG = "UQMWallpaper.SettingsFragment";
+    public static final String ALIEN_RACE = "race";
+    public static final String SCALING = "scaling";
+    public static final String VERSION = "version";
+    public static final String FILL_FRAME = "fillframe";
     static public SharedPreferences prefs;
     private ListPreference mAlien;
     private ListPreference mScaling;
@@ -47,12 +48,9 @@ public class SettingsFragment
         if (mVersion != null)
             mVersion.setSummary(getVersionName(getContext()));
 
-        String buf;
         prefs = getPreferenceManager().getSharedPreferences();
-        if ((buf = prefs.getString(ALIEN_RACE, null)) != null)
-            mAlien.setSummary(get_by_value(mAlien, buf));
-        if ((buf = prefs.getString(SCALING, null)) != null)
-            mScaling.setSummary(get_by_value(mScaling, buf));
+        set_summary_for(mAlien, ALIEN_RACE, prefs);
+        set_summary_for(mScaling, SCALING, prefs);
     }
 
     @Override
@@ -69,21 +67,21 @@ public class SettingsFragment
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        String buf;
-
         switch (key) {
             case ALIEN_RACE:
-                buf = prefs.getString(key, null);
-                if (buf != null)
-                    mAlien.setSummary(get_by_value(mAlien, buf));
+                set_summary_for(mAlien, key, prefs);
                 break;
             case SCALING:
-                buf = prefs.getString(key, null);
-                if (buf != null)
-                    mScaling.setSummary(get_by_value(mScaling, buf));
+                set_summary_for(mScaling, key, prefs);
                 break;
         }
         requireActivity().finish();
+    }
+
+    private void set_summary_for(ListPreference l, String key, SharedPreferences prefs) {
+        String buf;
+        if ((buf = prefs.getString(key, null)) != null)
+            l.setSummary(get_by_value(l, buf));
     }
 
     private String get_by_value(ListPreference l, String buf) {
