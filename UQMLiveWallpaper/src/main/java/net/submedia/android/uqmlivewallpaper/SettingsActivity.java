@@ -14,7 +14,7 @@
  * the License.
  */
 
-package net.submedia.android.uqmwallpaper;
+package net.submedia.android.uqmlivewallpaper;
 
 import android.os.Bundle;
 

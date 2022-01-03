@@ -16,9 +16,9 @@
 */
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.submedia.android.uqmwallpaper"
-    android:versionCode="202"
-    android:versionName="2.0.2">
+    package="net.submedia.android.uqmlivewallpaper"
+    android:versionCode="203"
+    android:versionName="2.0.3">
 
     <uses-feature android:name="android.software.live_wallpaper" />
 
@@ -29,9 +29,10 @@
         android:theme="@style/Theme.AppCompat.Light">
 
         <service
-            android:name=".UQMWallpaper"
+            android:name="net.submedia.android.uqmlivewallpaper.UQMWallpaper"
             android:label="@string/app_name"
-            android:permission="android.permission.BIND_WALLPAPER">
+            android:permission="android.permission.BIND_WALLPAPER"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
@@ -40,8 +41,9 @@
                 android:resource="@xml/uqmwallpaper" />
         </service>
         <activity
-            android:name=".SettingsActivity"
-            android:label="@string/app_settings">
+            android:name="net.submedia.android.uqmlivewallpaper.SettingsActivity"
+            android:label="@string/app_settings"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.PREFERENCE" />
