@@ -5,5 +5,5 @@
 <wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
     android:author="@string/app_author"
     android:description="@string/app_desc"
-    android:settingsActivity="net.submedia.android.uqmwallpaper.SettingsActivity"
+    android:settingsActivity="net.submedia.android.uqmlivewallpaper.SettingsActivity"
     android:thumbnail="@drawable/ic_launcher_wallpaper" />

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.submedia.android.uqmwallpaper;
+package net.submedia.android.uqmlivewallpaper;
 
 import android.app.WallpaperManager;
 import android.content.Context;
@@ -65,8 +65,7 @@ public class UQMWallpaper
         totalWidth = new Width(wm.getDesiredMinimumWidth());
         // this may need to be up-sold to a class variable
         int totalHeight = wm.getDesiredMinimumHeight();
-        Log.d(TAG, String.format("totalWidth: %04d totalHeight: %04d", totalWidth.full, totalHeight));
-
+        Log.d(TAG, String.format(Locale.US, "totalWidth: %04d totalHeight: %04d", totalWidth.full, totalHeight));
     }
 
     @Override
@@ -114,7 +113,7 @@ public class UQMWallpaper
             mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             mPrefs.registerOnSharedPreferenceChangeListener(this);
             onSharedPreferenceChanged(mPrefs, OFFSET_PREF);
-            Log.v(TAG, "started");
+            Log.i(TAG, "started");
         }
 
         private void setAspect(Bitmap b) {
@@ -144,7 +143,7 @@ public class UQMWallpaper
                         mUserOffset = prefs.getInt(OFFSET_PREF, 0);
                         break;
                     default:
-                        Log.d(TAG, "Unknown key changed: " + key);
+                        Log.w(TAG, "Unknown key changed: " + key);
                         break;
                 }
                 if (mAnim != null)
@@ -229,8 +228,7 @@ public class UQMWallpaper
                 mOffset = 0;
             else
                 mOffset = (int) ((totalWidth.half - mUserOffset) * xOffset + mUserOffset);
-            Log.d(TAG, String.format(Locale.US,
-                    "xOffset(%f) yOffset(%f) xStep(%f) yStep(%f) xPixels(%d) yPixels(%d) mUserOffset(%d) mOffset(%d)",
+            Log.d(TAG, String.format(Locale.US, "xOffset(%f) yOffset(%f) xStep(%f) yStep(%f) xPixels(%d) yPixels(%d) mUserOffset(%d) mOffset(%d)",
                     xOffset, yOffset, xStep, yStep, xPixels, yPixels, mUserOffset, mOffset));
             drawFrame();
         }
@@ -259,7 +257,7 @@ public class UQMWallpaper
                 default:
                     return;
             }
-            Log.d(TAG, String.format("mAnchor (%04d) mOffset(%04d)", mAnchor, mOffset));
+            Log.d(TAG, String.format(Locale.US, "mAnchor (%04d) mOffset(%04d)", mAnchor, mOffset));
         }
 
         private Bitmap blur(Bitmap inputBitmap) {

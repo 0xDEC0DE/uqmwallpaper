@@ -5,7 +5,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "net.submedia.android.uqmwallpaper"
+        applicationId "net.submedia.android.uqmlivewallpaper"
         minSdkVersion 28
         targetSdkVersion 29
     }
