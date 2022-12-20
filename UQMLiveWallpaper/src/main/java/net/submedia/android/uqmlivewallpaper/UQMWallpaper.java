@@ -171,7 +171,7 @@ public class UQMWallpaper
         @Override
         public void onVisibilityChanged(boolean visible) {
             mVisible = visible;
-            if (visible)
+            if (mVisible)
                 drawFrame();
             else
                 mHandler.removeCallbacks(mDrawComms);
@@ -363,9 +363,8 @@ public class UQMWallpaper
 
             // Reschedule the next redraw
             mHandler.removeCallbacks(mDrawComms);
-            if (mVisible) {
+            if (mVisible)
                 mHandler.postDelayed(mDrawComms, delay);
-            }
         }
     }
 }
