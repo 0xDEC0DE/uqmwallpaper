@@ -22,6 +22,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.SystemClock;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +38,7 @@ class Animation {
 
     // comm frame rate according to UQM sources
     public static final int FRAME_RATE = (1000 / 40);
+    static final int DEFAULT_FRAME_DELAY = 0x7FFFFFFF;
     public int next_frame_delay;
 
     public final byte RANDOM_ANIM = (1 << 0);
@@ -118,7 +121,7 @@ class Animation {
         long CurTime = SystemClock.uptimeMillis();
         long ElapsedTicks = CurTime - this.LastTime;
 
-        this.next_frame_delay = 0x7FFFFFFF;
+        this.next_frame_delay = DEFAULT_FRAME_DELAY;
         this.LastTime = CurTime;
 
         // scribble all the updates onto the canvas
@@ -185,13 +188,14 @@ class Animation {
             // Log.d(TAG, f.toString());
         }
 
-        if (this.next_frame_delay < FRAME_RATE || this.next_frame_delay == 0x7FFFFFFF)
+        if (this.next_frame_delay < FRAME_RATE || this.next_frame_delay == DEFAULT_FRAME_DELAY)
             this.next_frame_delay = FRAME_RATE;
 
         // return the resulting bitmap
         return this.result;
     }
 
+    @NonNull
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
@@ -246,13 +250,14 @@ class Animation {
 
         // stupid sign bits...
         public int randomFrameRate() {
-            return 1 + this.BaseFrameRate + rand.nextInt(0x7FFFFFFF) % (this.RandomFrameRate + 1);
+            return 1 + this.BaseFrameRate + rand.nextInt(DEFAULT_FRAME_DELAY) % (this.RandomFrameRate + 1);
         }
 
         public int randomRestartRate() {
-            return 1 + this.BaseRestartRate + rand.nextInt(0x7FFFFFFF) % (this.RandomRestartRate + 1);
+            return 1 + this.BaseRestartRate + rand.nextInt(DEFAULT_FRAME_DELAY) % (this.RandomRestartRate + 1);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return String.format(Locale.US, "Start[%05d] Frames[%02d] Flags[%02d] FrameRate[%05d] FrameRate2[%05d] Restart[%05d] Restart2[%05d] Block[%010d]",

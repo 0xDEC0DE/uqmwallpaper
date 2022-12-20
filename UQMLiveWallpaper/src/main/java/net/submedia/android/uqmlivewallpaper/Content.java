@@ -22,6 +22,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,7 +74,7 @@ public class Content {
             throw new IOException("error loading content, tried" + Arrays.toString(alien_races));
         } catch (Exception e) {
             // turn everything into an IOException.  might not be the best idea.
-            throw new IOException("error loading content: " + e.toString());
+            throw new IOException("error loading content: " + e);
         }
     }
 
@@ -90,10 +92,10 @@ public class Content {
         File cached = new File(c.getExternalCacheDir(), zipfile);
         try {
             ZipFile retval = new ZipFile(cached);
-            Log.d(TAG, String.format(Locale.US, "cached content pack found at %s, using", cached.toString()));
+            Log.d(TAG, String.format(Locale.US, "cached content pack found at %s, using", cached));
             return retval;
         } catch (IOException ioe) {
-            Log.d(TAG, String.format(Locale.US, "no cached content pack found at %s, copying", cached.toString()));
+            Log.d(TAG, String.format(Locale.US, "no cached content pack found at %s, copying", cached));
             InputStream fd = c.getAssets().open(zipfile, AssetManager.ACCESS_BUFFER);
             Log.d(TAG, String.format(Locale.US, "opened asset %s", fd.toString()));
             try (FileOutputStream out = new FileOutputStream(cached)) {
@@ -147,6 +149,7 @@ public class Content {
     //------------------------------------------------------------------------
     // The following are for testing/debugging
 
+    @NonNull
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
@@ -157,7 +160,7 @@ public class Content {
             result.append(" Frame:" + NEW_LINE)
                     .append("  Filename: " + f.filename + NEW_LINE)
                     .append("  " + f.hotspot.toString() + NEW_LINE)
-                    .append("  " + f.toString() + NEW_LINE);
+                    .append("  " + f + NEW_LINE);
         }
         result.append("}");
 
@@ -188,6 +191,7 @@ public class Content {
             }
         }
 
+        @NonNull
         @Override
         public String toString() {
             return String.format(Locale.US, "Content: %dx%d", this.content.getWidth(),
@@ -221,6 +225,7 @@ public class Content {
                 this(Integer.parseInt(x), y);
             }
 
+            @NonNull
             @Override
             public String toString() {
                 return String.format(Locale.US, "Hotspot: (%1.2f, %1.2f)", this.x, this.y);
