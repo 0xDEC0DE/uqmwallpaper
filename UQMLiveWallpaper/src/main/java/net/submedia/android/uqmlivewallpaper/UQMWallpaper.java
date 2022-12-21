@@ -55,6 +55,7 @@ public class UQMWallpaper
     private Context mContext;
     private Width totalWidth;
     private int mUserOffset;
+    private CommsEngine engine;
 
     @Override
     public void onCreate() {
@@ -75,7 +76,14 @@ public class UQMWallpaper
 
     @Override
     public Engine onCreateEngine() {
-        return new CommsEngine();
+        // Multiple running engines is allowed, but we want a singleton
+        if (engine != null) {
+            Log.d(TAG, "Another engine is running; destroying it");
+            engine.onDestroy();
+            engine = null;
+        }
+        engine = new CommsEngine();
+        return engine;
     }
 
     private static class Width {
@@ -164,8 +172,13 @@ public class UQMWallpaper
 
         @Override
         public void onDestroy() {
-            super.onDestroy();
             mHandler.removeCallbacks(mDrawComms);
+            if (this.isPreview()) {
+                Editor e = mPrefs.edit();
+                e.putInt(OFFSET_PREF, mOffset);
+                Log.d(TAG, String.format(Locale.US, "Saving offset (%d) to sharedPreferences: %s", mOffset, e.commit()));
+            }
+            super.onDestroy();
         }
 
         @Override
@@ -201,9 +214,13 @@ public class UQMWallpaper
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
+            // NOTE(nic): On physical devices, occasionally a Surface object with negative height/width
+            //  will trigger this callback.  It does not appear to happen with emulators.  Lovely.
+            //  This is "junk data", and only serves to gum up state, so ignore it.
+            if (width < 0 || height < 0) return;
+
             mWidth = width;
             mHeight = height;
-            mOffset += mUserOffset;
             Log.d(TAG, String.format(Locale.US, "width(%04d) height(%04d) offset(%04d)", mWidth, mHeight, mOffset));
 
             if (mAnim == null)
@@ -215,9 +232,9 @@ public class UQMWallpaper
 
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder) {
-            super.onSurfaceDestroyed(holder);
             mVisible = false;
             mHandler.removeCallbacks(mDrawComms);
+            super.onSurfaceDestroyed(holder);
         }
 
         @Override
@@ -247,12 +264,6 @@ public class UQMWallpaper
                     if (mOffset < totalWidth.half) mOffset = totalWidth.half;
                     break;
                 case MotionEvent.ACTION_UP:
-                    // NOTE(nic): it would be better to run this only once in onDestroy() for the preview,
-                    // but that appears to race with onCreate() for the non-preview Engine.  So we spam
-                    // them continuously into mPrefs instead.  C'est la vie.
-                    Editor e = mPrefs.edit();
-                    e.putInt(OFFSET_PREF, mOffset);
-                    Log.d(TAG, String.format(Locale.US, "Saving offset to sharedPreferences: %s", e.commit()));
                     mUserOffset = mOffset;
                 default:
                     return;
@@ -282,89 +293,86 @@ public class UQMWallpaper
          */
         void drawFrame() {
             final SurfaceHolder holder = getSurfaceHolder();
+            if (!holder.getSurface().isValid()) return;
             // comm frame rate according to UQM sources
             int delay = (1000 / 40);
 
-            Canvas c = null;
+            final Canvas c = holder.lockCanvas();
             try {
-                c = holder.lockCanvas();
-                if (c != null) {
-                    // reset canvas
-                    c.drawColor(Color.BLACK);
-                    // draw something
-                    if (mAnim != null) {
-                        int x, y, w, h;
-                        Bitmap b = mAnim.getFrame();
+                if (c == null) return;
+                // reset canvas
+                c.drawColor(Color.BLACK);
+                if (mAnim == null) return;
+                // draw something
+                Bitmap b = mAnim.getFrame();
+                if (b == null) return;
 
-                        /*
-                         * Center the animation output on the screen, scaling the image as needed.
-                         * In the case of scaling mode #2 position it according to the virtual
-                         * screen offset.  This allows for the "parallax effect" that some
-                         * launchers support
-                         */
-                        if (b != null) {
-                            int aspectHeight = (b.getHeight() * mAspect) / 10000;
-                            switch (mScaling) {
-                                case 1:
-                                    x = 0;
-                                    y = (mHeight - aspectHeight) / 2;
-                                    w = mWidth;
-                                    h = y + aspectHeight;
-                                    break;
-                                case 2:
-                                    x = mOffset;
-                                    y = (mHeight - aspectHeight) / 2;
-                                    w = x + totalWidth.full;
-                                    h = y + aspectHeight;
-                                    break;
-                                default:
-                                    x = (mWidth - b.getWidth()) / 2;
-                                    y = (mHeight - b.getHeight()) / 2;
-                                    w = x + b.getWidth();
-                                    h = y + b.getHeight();
-                            }
-                            mRect.set(x, y, w, h);
-                            if (mFillFrame) {
-                                mPaint.setAlpha(0x7F);
-                                bgRect.set(mOffset, 0, mOffset + totalWidth.full, mHeight);
-                                if (mScaling == 2) {
-                                    int aspectWidth = (totalWidth.full * mAspect) / 200000;
-                                    bgRect.left -= aspectWidth;
-                                    bgRect.right += aspectWidth;
-                                }
-                                c.drawBitmap(blur(b), null, bgRect, mPaint);
-                                mPaint.setMaskFilter(null);
-                                mPaint.setAlpha(0xFF);
-                            }
-                            c.drawBitmap(b, null, mRect, mPaint);
-                            if (this.isPreview() && mScaling == 2) {
-                                w = mWidth / 2;
-                                h = mHeight / 5;
-                                TextPaint p = new TextPaint();
-                                p.setAntiAlias(true);
-                                p.setColor(Color.WHITE);
-
-                                p.setTextAlign(Paint.Align.CENTER);
-                                p.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-                                p.setTextSize(16 * getResources().getDisplayMetrics().density);
-                                String text = mContext.getString(R.string.set_center);
-                                StaticLayout.Builder builder = StaticLayout.Builder.obtain(text, 0, text.length(), p, mWidth);
-                                StaticLayout l = builder.build();
-                                c.translate(w, h - (l.getHeight() >> 1));
-                                l.draw(c);
-                            }
-                        }
-                        delay = mAnim.next_frame_delay;
-                    }
+                /*
+                 * Center the animation output on the screen, scaling the image as needed.
+                 * In the case of scaling mode #2 position it according to the virtual
+                 * screen offset.  This allows for the "parallax effect" that some
+                 * launchers support
+                 */
+                int x, y, w, h;
+                int aspectHeight = (b.getHeight() * mAspect) / 10000;
+                switch (mScaling) {
+                    case 1:
+                        x = 0;
+                        y = (mHeight - aspectHeight) / 2;
+                        w = mWidth;
+                        h = y + aspectHeight;
+                        break;
+                    case 2:
+                        x = mOffset;
+                        y = (mHeight - aspectHeight) / 2;
+                        w = x + totalWidth.full;
+                        h = y + aspectHeight;
+                        break;
+                    default:
+                        x = (mWidth - b.getWidth()) / 2;
+                        y = (mHeight - b.getHeight()) / 2;
+                        w = x + b.getWidth();
+                        h = y + b.getHeight();
                 }
+                mRect.set(x, y, w, h);
+                if (mFillFrame) {
+                    mPaint.setAlpha(0x7F);
+                    bgRect.set(mOffset, 0, mOffset + totalWidth.full, mHeight);
+                    if (mScaling == 2) {
+                        int aspectWidth = (totalWidth.full * mAspect) / 200000;
+                        bgRect.left -= aspectWidth;
+                        bgRect.right += aspectWidth;
+                    }
+                    c.drawBitmap(blur(b), null, bgRect, mPaint);
+                    mPaint.setMaskFilter(null);
+                    mPaint.setAlpha(0xFF);
+                }
+                c.drawBitmap(b, null, mRect, mPaint);
+                if (this.isPreview() && mScaling == 2) {
+                    w = mWidth / 2;
+                    h = mHeight / 5;
+                    TextPaint p = new TextPaint();
+                    p.setAntiAlias(true);
+                    p.setColor(Color.WHITE);
+
+                    p.setTextAlign(Paint.Align.CENTER);
+                    p.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+                    p.setTextSize(16 * getResources().getDisplayMetrics().density);
+                    String text = mContext.getString(R.string.set_center);
+                    StaticLayout.Builder builder = StaticLayout.Builder.obtain(text, 0, text.length(), p, mWidth);
+                    StaticLayout l = builder.build();
+                    c.translate(w, h - (l.getHeight() >> 1));
+                    l.draw(c);
+                }
+                delay = mAnim.next_frame_delay;
             } finally {
                 if (c != null) holder.unlockCanvasAndPost(c);
-            }
 
-            // Reschedule the next redraw
-            mHandler.removeCallbacks(mDrawComms);
-            if (mVisible)
-                mHandler.postDelayed(mDrawComms, delay);
+                // Reschedule the next redraw
+                mHandler.removeCallbacks(mDrawComms);
+                if (mVisible)
+                    mHandler.postDelayed(mDrawComms, delay);
+            }
         }
     }
 }
