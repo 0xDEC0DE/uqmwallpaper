@@ -69,12 +69,16 @@ public class Content {
                     }
                 }
             }
-            this.zipfile.close();
-
-            throw new IOException("error loading content, tried" + Arrays.toString(alien_races));
+            throw new IOException("error loading content, tried " + Arrays.toString(alien_races));
         } catch (Exception e) {
             // turn everything into an IOException.  might not be the best idea.
             throw new IOException("error loading content: " + e);
+        }
+        finally {
+            if (this.zipfile != null) {
+                this.zipfile.close();
+                this.zipfile = null;
+            }
         }
     }
 
