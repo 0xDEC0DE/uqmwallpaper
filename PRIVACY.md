@@ -1,4 +1,4 @@
 Privacy Policy
 ==============
 
-This app does not collect, store, or transmit any personally identifying data whatsoever.
+The Ur-Quan Masters Live Wallpaper app does not collect, store, or transmit any personally identifying data whatsoever.
