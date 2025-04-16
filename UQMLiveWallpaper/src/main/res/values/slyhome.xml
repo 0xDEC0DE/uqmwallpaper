@@ -137,18 +137,18 @@
   </integer-array>
   <string-array name="slyhome">
     <item>slyhome_content</item>
-    <item>slyhome_anim12</item>
-    <item>slyhome_anim11</item>
-    <item>slyhome_anim10</item>
-    <item>slyhome_anim9</item>
-    <item>slyhome_anim8</item>
-    <item>slyhome_anim7</item>
-    <item>slyhome_anim6</item>
-    <item>slyhome_anim5</item>
-    <item>slyhome_anim4</item>
-    <item>slyhome_anim3</item>
-    <item>slyhome_anim2</item>
-    <item>slyhome_anim1</item>
     <item>slyhome_anim0</item>
+    <item>slyhome_anim1</item>
+    <item>slyhome_anim2</item>
+    <item>slyhome_anim3</item>
+    <item>slyhome_anim4</item>
+    <item>slyhome_anim5</item>
+    <item>slyhome_anim6</item>
+    <item>slyhome_anim7</item>
+    <item>slyhome_anim8</item>
+    <item>slyhome_anim9</item>
+    <item>slyhome_anim10</item>
+    <item>slyhome_anim11</item>
+    <item>slyhome_anim12</item>
   </string-array>
 </resources>

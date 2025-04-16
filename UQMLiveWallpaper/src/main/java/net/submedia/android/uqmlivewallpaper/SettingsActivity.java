@@ -18,19 +18,44 @@ package net.submedia.android.uqmlivewallpaper;
 
 import android.os.Bundle;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-public class SettingsActivity
-        extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
+
+    public static final String EXTRA_TARGET_FLAGS = "target_flags";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
-        // Display fragment as main content
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
-                .commit();
+        setContentView(R.layout.activity_settings);
 
+        Toolbar toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(insets.left, 0, insets.right, insets.bottom);
+
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.appBarLayout), (appBar, appBarInsets) -> {
+                Insets barInsets = appBarInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                appBar.setPadding(barInsets.left, barInsets.top, barInsets.right, 0);
+                return appBarInsets;
+            });
+
+            return windowInsets;
+        });
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.activity_settings, new SettingsFragment())
+                    .commit();
+        }
     }
 }

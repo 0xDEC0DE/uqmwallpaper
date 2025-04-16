@@ -176,22 +176,22 @@
   </integer-array>
   <string-array name="vux">
     <item>vux_content</item>
-    <item>vux_anim16</item>
-    <item>vux_anim15</item>
-    <item>vux_anim14</item>
-    <item>vux_anim13</item>
-    <item>vux_anim12</item>
-    <item>vux_anim11</item>
-    <item>vux_anim10</item>
-    <item>vux_anim9</item>
-    <item>vux_anim8</item>
-    <item>vux_anim7</item>
-    <item>vux_anim6</item>
-    <item>vux_anim5</item>
-    <item>vux_anim4</item>
-    <item>vux_anim3</item>
-    <item>vux_anim2</item>
-    <item>vux_anim1</item>
     <item>vux_anim0</item>
+    <item>vux_anim1</item>
+    <item>vux_anim2</item>
+    <item>vux_anim3</item>
+    <item>vux_anim4</item>
+    <item>vux_anim5</item>
+    <item>vux_anim6</item>
+    <item>vux_anim7</item>
+    <item>vux_anim8</item>
+    <item>vux_anim9</item>
+    <item>vux_anim10</item>
+    <item>vux_anim11</item>
+    <item>vux_anim12</item>
+    <item>vux_anim13</item>
+    <item>vux_anim14</item>
+    <item>vux_anim15</item>
+    <item>vux_anim16</item>
   </string-array>
 </resources>

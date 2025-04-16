@@ -136,18 +136,18 @@
   </integer-array>
   <string-array name="orz">
     <item>orz_content</item>
-    <item>orz_anim12</item>
-    <item>orz_anim11</item>
-    <item>orz_anim10</item>
-    <item>orz_anim9</item>
-    <item>orz_anim8</item>
-    <item>orz_anim7</item>
-    <item>orz_anim6</item>
-    <item>orz_anim5</item>
-    <item>orz_anim4</item>
-    <item>orz_anim3</item>
-    <item>orz_anim2</item>
-    <item>orz_anim1</item>
     <item>orz_anim0</item>
+    <item>orz_anim1</item>
+    <item>orz_anim2</item>
+    <item>orz_anim3</item>
+    <item>orz_anim4</item>
+    <item>orz_anim5</item>
+    <item>orz_anim6</item>
+    <item>orz_anim7</item>
+    <item>orz_anim8</item>
+    <item>orz_anim9</item>
+    <item>orz_anim10</item>
+    <item>orz_anim11</item>
+    <item>orz_anim12</item>
   </string-array>
 </resources>

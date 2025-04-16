@@ -86,13 +86,13 @@
   </integer-array>
   <string-array name="spathi">
     <item>spathi_content</item>
-    <item>spathi_anim7</item>
-    <item>spathi_anim6</item>
-    <item>spathi_anim5</item>
-    <item>spathi_anim4</item>
-    <item>spathi_anim3</item>
-    <item>spathi_anim2</item>
-    <item>spathi_anim1</item>
     <item>spathi_anim0</item>
+    <item>spathi_anim1</item>
+    <item>spathi_anim2</item>
+    <item>spathi_anim3</item>
+    <item>spathi_anim4</item>
+    <item>spathi_anim5</item>
+    <item>spathi_anim6</item>
+    <item>spathi_anim7</item>
   </string-array>
 </resources>

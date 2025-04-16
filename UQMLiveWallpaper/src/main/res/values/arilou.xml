@@ -206,25 +206,25 @@
   </integer-array>
   <string-array name="arilou">
     <item>arilou_content</item>
-    <item>arilou_anim19</item>
-    <item>arilou_anim18</item>
-    <item>arilou_anim17</item>
-    <item>arilou_anim16</item>
-    <item>arilou_anim15</item>
-    <item>arilou_anim14</item>
-    <item>arilou_anim13</item>
-    <item>arilou_anim12</item>
-    <item>arilou_anim11</item>
-    <item>arilou_anim10</item>
-    <item>arilou_anim9</item>
-    <item>arilou_anim8</item>
-    <item>arilou_anim7</item>
-    <item>arilou_anim6</item>
-    <item>arilou_anim5</item>
-    <item>arilou_anim4</item>
-    <item>arilou_anim3</item>
-    <item>arilou_anim2</item>
-    <item>arilou_anim1</item>
     <item>arilou_anim0</item>
+    <item>arilou_anim1</item>
+    <item>arilou_anim2</item>
+    <item>arilou_anim3</item>
+    <item>arilou_anim4</item>
+    <item>arilou_anim5</item>
+    <item>arilou_anim6</item>
+    <item>arilou_anim7</item>
+    <item>arilou_anim8</item>
+    <item>arilou_anim9</item>
+    <item>arilou_anim10</item>
+    <item>arilou_anim11</item>
+    <item>arilou_anim12</item>
+    <item>arilou_anim13</item>
+    <item>arilou_anim14</item>
+    <item>arilou_anim15</item>
+    <item>arilou_anim16</item>
+    <item>arilou_anim17</item>
+    <item>arilou_anim18</item>
+    <item>arilou_anim19</item>
   </string-array>
 </resources>

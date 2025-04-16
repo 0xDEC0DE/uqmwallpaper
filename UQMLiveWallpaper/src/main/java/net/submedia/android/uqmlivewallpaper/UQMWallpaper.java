@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Nicolas Simonds
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
  *	http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package net.submedia.android.uqmlivewallpaper;
@@ -20,359 +20,564 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RenderEffect;
+import android.graphics.RenderNode;
+import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.os.Handler;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
+import android.os.Looper;
+import android.os.OperationCanceledException;
 import android.service.wallpaper.WallpaperService;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.WindowManager;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.preference.PreferenceManager;
 
-import java.util.Locale;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 
-
-public class UQMWallpaper
-        extends WallpaperService {
-
+public class UQMWallpaper extends WallpaperService {
     public static final String TAG = "UQMWallpaper";
     public static final String OFFSET_PREF = "offset";
 
-    private final Handler mHandler = new Handler();
+    public static final String PREFS_HOME = "prefs_home";
+    public static final String PREFS_LOCK = "prefs_lock";
+
+    // Standard command sent by most Android Wallpaper Pickers when the user confirms their selection.
+    private static final String COMMAND_REAPPLY = "android.wallpaper.reapply";
+
     private Context mContext;
-    private Width totalWidth;
-    private int mUserOffset;
-    private CommsEngine engine;
+    private int totalWidth;
+    private final List<CommsEngine> mActiveEngines = new ArrayList<>();
+    private AnimationFactory mAnimationFactory = Animation::new;
+
+    private static WallpaperSettings sLiveHomeSettings = null;
+    private static WallpaperSettings sLiveLockSettings = null;
+    private static WallpaperSettings sStagedSettings = null;
+
+    /**
+     * Used for non-blocking UI thread tasks, such as retrying wallpaper manager queries
+     * and surface update scheduling.
+     */
+    private static final Handler sLifecycleHandler = new Handler(Looper.getMainLooper());
+
+    public static WallpaperSettings getStagedSettings() {
+        return sStagedSettings;
+    }
+
+    public static WallpaperSettings getLiveSettings() {
+        return sLiveHomeSettings;
+    }
+
+    public static WallpaperSettings getLiveSettings(int flags) {
+        return (flags & WallpaperManager.FLAG_LOCK) != 0 ? sLiveLockSettings : sLiveHomeSettings;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        // what odd method names for these...
         WallpaperManager wm = WallpaperManager.getInstance(mContext);
-        totalWidth = new Width(wm.getDesiredMinimumWidth());
-        // this may need to be up-sold to a class variable
+        totalWidth = wm.getDesiredMinimumWidth();
         int totalHeight = wm.getDesiredMinimumHeight();
-        Log.d(TAG, String.format(Locale.US, "totalWidth: %04d totalHeight: %04d", totalWidth.full, totalHeight));
+        Log.d(TAG, "onCreate: totalWidth: %04d totalHeight: %04d".formatted(totalWidth, totalHeight));
+
+        SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        migrateLegacyScaling(defaultPrefs);
+        migrateToNamespacedPrefs(defaultPrefs);
+
+        sLiveHomeSettings = new WallpaperSettings(getSharedPreferences(PREFS_HOME, MODE_PRIVATE));
+        sLiveHomeSettings.setTargetFlags(WallpaperManager.FLAG_SYSTEM);
+        sLiveLockSettings = new WallpaperSettings(getSharedPreferences(PREFS_LOCK, MODE_PRIVATE));
+        sLiveLockSettings.setTargetFlags(WallpaperManager.FLAG_LOCK);
+
+        Log.d(TAG, "Initial live settings loaded. Home: %s, Lock: %s".formatted(sLiveHomeSettings, sLiveLockSettings));
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    private void migrateToNamespacedPrefs(SharedPreferences defaultPrefs) {
+        SharedPreferences homePrefs = getSharedPreferences(PREFS_HOME, MODE_PRIVATE);
+        SharedPreferences lockPrefs = getSharedPreferences(PREFS_LOCK, MODE_PRIVATE);
+
+        // Migration trigger: home prefs are empty AND default prefs have content
+        if (homePrefs.getAll().isEmpty() && !defaultPrefs.getAll().isEmpty()) {
+            Log.i(TAG, "Migrating default preferences to home/lock namespace.");
+            copyPrefs(defaultPrefs, homePrefs);
+            copyPrefs(defaultPrefs, lockPrefs);
+
+            // Retirement: Safely clear legacy global preferences after migration
+            defaultPrefs.edit().clear().apply();
+            Log.i(TAG, "Legacy global preferences retired.");
+        }
+    }
+
+    private void copyPrefs(SharedPreferences source, SharedPreferences dest) {
+        Editor editor = dest.edit();
+        for (Map.Entry<String, ?> entry : source.getAll().entrySet()) {
+            Object value = entry.getValue();
+            String key = entry.getKey();
+            if (value instanceof String) editor.putString(key, (String) value);
+            else if (value instanceof Boolean) editor.putBoolean(key, (Boolean) value);
+            else if (value instanceof Float) editor.putFloat(key, (Float) value);
+            else if (value instanceof Integer) editor.putInt(key, (Integer) value);
+            else if (value instanceof Long) editor.putLong(key, (Long) value);
+        }
+        editor.apply();
+    }
+
+    public static void migrateLegacyScaling(SharedPreferences prefs) {
+        if (prefs.contains(SettingsFragment.SCALING) && !prefs.contains(SettingsFragment.SCALING_FACTOR)) {
+            String legacyValue = prefs.getString(SettingsFragment.SCALING, "2");
+            float newFactor = "0".equals(legacyValue) ? 0.0f : 100.0f;
+
+            prefs.edit()
+                    .putFloat(SettingsFragment.SCALING_FACTOR, newFactor)
+                    .remove(SettingsFragment.SCALING)
+                    .apply();
+        }
     }
 
     @Override
     public Engine onCreateEngine() {
-        // Multiple running engines is allowed, but we want a singleton
-        if (engine != null) {
-            Log.d(TAG, "Another engine is running; destroying it");
-            engine.onDestroy();
-            engine = null;
+        Log.i(TAG, "onCreateEngine");
+        CommsEngine engine = new CommsEngine();
+        synchronized (mActiveEngines) {
+            mActiveEngines.add(engine);
         }
-        engine = new CommsEngine();
         return engine;
     }
 
-    private static class Width {
-        public int full;
-        public int half;
+    @VisibleForTesting
+    void setAnimationFactory(AnimationFactory factory) {
+        this.mAnimationFactory = factory;
+    }
 
-        Width(int width) {
-            this.full = width;
-            this.half = -(width >> 1);
+    @VisibleForTesting
+    void setTotalWidth(int width) {
+        this.totalWidth = width;
+        synchronized (mActiveEngines) {
+            for (CommsEngine engine : mActiveEngines) engine.getViewModel().setTotalWidth(width);
         }
+    }
+
+    interface AnimationFactory {
+        Animation create(String race, Context c, java.util.function.Supplier<Boolean> isCancelled) throws Exception;
     }
 
     class CommsEngine
             extends Engine
-            implements SharedPreferences.OnSharedPreferenceChangeListener {
+            implements WallpaperSettings.OnSettingsChangedListener {
 
-        private final SharedPreferences mPrefs;
-        private final Rect mRect = new Rect();
         private final Rect bgRect = new Rect();
         private final Paint mPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
-        private int mAnchor = 0;
-        private int mOffset = 0;
-        private int mAspect;
-        private int mWidth;
-        private int mHeight;
-        private Animation mAnim;
-        private int mScaling = 2;
-        private boolean mFillFrame = false;
-        private boolean mVisible;
-        private final Runnable mDrawComms = this::drawFrame;
-        private final RenderScript rs = RenderScript.create(mContext);
-        private final ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        private final RenderNode blurNode = new RenderNode("blurNode");
+        private final WallpaperViewModel mViewModel;
+        private final ExecutorService mLoaderExecutor = Executors.newSingleThreadExecutor();
+
+        private boolean mIsPreview;
+        private int mWallpaperFlags;
+        private boolean mCreated = false;
+        private volatile boolean mIsVisible = false;
+        private WallpaperSettings mSettings;
 
         CommsEngine() {
-            mPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            mPrefs.registerOnSharedPreferenceChangeListener(this);
-            onSharedPreferenceChanged(mPrefs, OFFSET_PREF);
-            Log.i(TAG, "started");
-        }
+            mSettings = sLiveHomeSettings;
+            mViewModel = new WallpaperViewModel(mSettings);
+            mViewModel.setTotalWidth(totalWidth);
+            mViewModel.setOnDrawNeeded(this::drawFrame);
+            mViewModel.start();
 
-        private void setAspect(Bitmap b) {
-            mAspect = (((mScaling > 1) ? totalWidth.full : mWidth) * 10000) / b.getWidth();
-        }
-
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-            Log.d(TAG, String.format(Locale.US, "%s => %s", key, prefs.toString()));
-            try {
-                // TODO(nic): get the getString() defaults from the settings.xml defaults
-                if (key == null) return;
-                switch (key) {
-                    case SettingsFragment.ALIEN_RACE:
-                        mAnim = new Animation(prefs.getString(SettingsFragment.ALIEN_RACE, "urquan"), mContext);
-                        Log.d(TAG, mAnim.toString());
-                        break;
-                    case SettingsFragment.SCALING:
-                        // NOTE(nic): saving this preference as a string and converting it to an int makes
-                        // manipulating the Settings way less complicated.
-                        mScaling = Integer.parseInt(prefs.getString(SettingsFragment.SCALING, "2"));
-                        break;
-                    case SettingsFragment.FILL_FRAME:
-                        mFillFrame = prefs.getBoolean(SettingsFragment.FILL_FRAME, false);
-                        break;
-                    case OFFSET_PREF:
-                        mUserOffset = prefs.getInt(OFFSET_PREF, 0);
-                        break;
-                    default:
-                        Log.w(TAG, "Unknown key changed: " + key);
-                        break;
-                }
-                if (mAnim != null)
-                    setAspect(mAnim.getFrame());
-            } catch (Exception e) {
-                Log.w(TAG, e.toString());
-                for (StackTraceElement t : e.getStackTrace()) {
-                    Log.d(TAG, t.toString());
-                }
-                mAnim = null;
-            }
+            RenderEffect blurEffect = RenderEffect.createBlurEffect(45.5f, 45.5f, Shader.TileMode.CLAMP);
+            blurNode.setRenderEffect(blurEffect);
         }
 
         @Override
         public void onCreate(SurfaceHolder surfaceHolder) {
             super.onCreate(surfaceHolder);
+            mIsPreview = isPreview();
+            mWallpaperFlags = getWallpaperFlagsSafe();
+            mCreated = true;
+            setTouchEventsEnabled(true);
+            Log.i(TAG, "Engine@%08x: onCreate(preview=%b, flags=%d)".formatted(System.identityHashCode(this), mIsPreview, mWallpaperFlags));
+
+            if (mIsPreview) {
+                synchronized (mActiveEngines) {
+                    boolean anotherPreviewActive = false;
+                    for (CommsEngine e : mActiveEngines) {
+                        if (e != this && e.mCreated && e.mIsPreview) {
+                            anotherPreviewActive = true;
+                            break;
+                        }
+                    }
+                    if (!anotherPreviewActive && sStagedSettings != null && sStagedSettings.getState() != WallpaperSettings.State.COMMITTED) {
+                        Log.d(TAG, "Engine@%08x: New preview session detected. Discarding abandoned staged settings.".formatted(System.identityHashCode(this)));
+                        sStagedSettings = null;
+                    }
+                }
+
+                if (sStagedSettings == null) {
+                    Log.d(TAG, "Engine@%08x: Creating new staged settings from live.".formatted(System.identityHashCode(this)));
+                    WallpaperSettings source = getLiveSettings(mWallpaperFlags);
+                    sStagedSettings = source.clone();
+                    sStagedSettings.setState(WallpaperSettings.State.STAGED);
+                } else {
+                    Log.d(TAG, "Engine@%08x: Resuming existing staged settings (State: %s).".formatted(System.identityHashCode(this), sStagedSettings.getState()));
+                }
+                if (mWallpaperFlags != 0) {
+                    sStagedSettings.setTargetFlags(mWallpaperFlags);
+                }
+                mSettings = sStagedSettings;
+            } else {
+                synchronized (mActiveEngines) {
+                    if (sStagedSettings != null && sStagedSettings.getState() == WallpaperSettings.State.STAGED) {
+                        sStagedSettings.setTargetFlags(mWallpaperFlags != 0 ? mWallpaperFlags : WallpaperManager.FLAG_SYSTEM);
+                        sStagedSettings.setState(WallpaperSettings.State.COMMITTED);
+                    }
+                    checkAndAdoptSettings("onCreate");
+                }
+                mSettings = getLiveSettings(mWallpaperFlags);
+            }
+            Log.d(TAG, "Engine@%08x: Initialized with settings: %s".formatted(System.identityHashCode(this), mSettings));
+
+            mViewModel.updateFromSettings(mSettings);
+            mSettings.addListener(this);
+        }
+
+        // Return default value if internal binder is not initialized (e.g. in some unit tests)
+        @VisibleForTesting
+        int getWallpaperFlagsSafe() {
+            try {
+                return getWallpaperFlags();
+            } catch (NullPointerException e) {
+                return WallpaperManager.FLAG_SYSTEM;
+            }
+        }
+
+        /**
+         * Pull-based adoption for Live engines.
+         * Must be called within a synchronized(mActiveEngines) block.
+         */
+        private void checkAndAdoptSettings(String trigger) {
+            if (mIsPreview) return;
+
+            if (sStagedSettings != null && sStagedSettings.getState() == WallpaperSettings.State.COMMITTED) {
+                // Expansion: If the staged settings were committed with a subset of this engine's
+                // targets, expand them. This ensures "Both" works even if commitment was triggered
+                // by a more narrow engine (like a preview engine).
+                if (sStagedSettings.getTargetFlags() != 0 && (sStagedSettings.getTargetFlags() & mWallpaperFlags) != mWallpaperFlags) {
+                    Log.d(TAG, "Expanding staged targets from %d to include %d".formatted(sStagedSettings.getTargetFlags(), mWallpaperFlags));
+                    sStagedSettings.setTargetFlags(sStagedSettings.getTargetFlags() | mWallpaperFlags);
+                }
+                Log.i(TAG, "Engine@%08x (LIVE): Adopting COMMITTED staged settings [trigger: %s]".formatted(System.identityHashCode(this), trigger));
+                performAdoption();
+            } else {
+                Log.v(TAG, "Engine@%08x (LIVE): Skipping adoption [trigger: %s, reason: none ready]".formatted(System.identityHashCode(this), trigger));
+            }
+        }
+
+        /**
+         * Performs the actual handoff from staged to live settings and persists to disk.
+         * Must be called within a synchronized(mActiveEngines) block.
+         */
+        private void performAdoption() {
+            if (sStagedSettings == null) return;
+
+            int targets = sStagedSettings.getTargetFlags();
+            if (targets == 0) targets = WallpaperManager.FLAG_SYSTEM;
+
+            // Use a temporary clone to save without affecting live settings yet
+            WallpaperSettings temp = sStagedSettings.clone();
+            temp.setState(WallpaperSettings.State.LIVE);
+
+            boolean success = true;
+            if ((targets & WallpaperManager.FLAG_SYSTEM) != 0) {
+                Editor editor = getSharedPreferences(PREFS_HOME, MODE_PRIVATE).edit();
+                if (!temp.save(editor)) success = false;
+                else sLiveHomeSettings.copyFrom(sStagedSettings);
+            }
+            if ((targets & WallpaperManager.FLAG_LOCK) != 0) {
+                Editor editor = getSharedPreferences(PREFS_LOCK, MODE_PRIVATE).edit();
+                if (!temp.save(editor)) success = false;
+                else sLiveLockSettings.copyFrom(sStagedSettings);
+            }
+
+            if (!success) {
+                Log.e(TAG, "Failed to persist settings to disk during adoption.");
+                return;
+            }
+
+            Log.i(TAG, "Live settings handoff complete for targets: " + targets);
+            sStagedSettings = null;
+
+            // Force all engines to refresh from their respective updated live settings
+            synchronized (mActiveEngines) {
+                for (CommsEngine e : mActiveEngines) {
+                    if (e.mIsPreview) continue;
+                    WallpaperSettings correctLive = getLiveSettings(e.mWallpaperFlags);
+                    if (e.mSettings != correctLive) {
+                        e.mSettings.removeListener(e);
+                        e.mSettings = correctLive;
+                        e.mSettings.addListener(e);
+                    }
+                    e.mViewModel.updateFromSettings(correctLive);
+                }
+            }
+        }
+
+        @VisibleForTesting
+        WallpaperViewModel getViewModel() {
+            return mViewModel;
+        }
+
+        @Override
+        public void onSettingsChanged(String key) {
+            Log.d(TAG, "Engine@%08x: onSettingsChanged(%s)".formatted(System.identityHashCode(this), key));
+            try {
+                if (key == null) return;
+
+                switch (key) {
+                    case SettingsFragment.ALIEN_RACE -> {
+                        if (mIsVisible) loadAnimation(mSettings.race);
+                        else mViewModel.setAnimation(null);
+                    }
+                    case SettingsFragment.SCALING_FACTOR -> mViewModel.setScalingFactor(mSettings.scalingFactor);
+                    case SettingsFragment.FILL_FRAME -> mViewModel.setFillFrame(mSettings.fillFrame);
+                    case OFFSET_PREF -> mViewModel.setUserOffset(mSettings.offset);
+                    default -> Log.w(TAG, "Engine@%08x: Unknown key changed: %s".formatted(System.identityHashCode(this), key));
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Engine@%08x: %s".formatted(System.identityHashCode(this), e));
+                mViewModel.setAnimation(null);
+            }
+        }
+
+        private void loadAnimation(String race) {
+            if (mLoaderExecutor.isShutdown()) return;
+            Log.d(TAG, "Engine@%08x: Loading animation for %s".formatted(System.identityHashCode(this), race));
+            mViewModel.setLoading(true);
+            try {
+                mLoaderExecutor.execute(() -> {
+                    try {
+                        if (!mIsVisible) return;
+                        Animation anim = mAnimationFactory.create(race, mContext, () -> !mIsVisible);
+                        if (!mIsVisible) {
+                            anim.close();
+                            return;
+                        }
+                        mViewModel.setAnimation(anim);
+                        mViewModel.updateAspect(anim.getFrame());
+                        Log.d(TAG, "Engine@%08x: Successfully loaded animation for %s".formatted(System.identityHashCode(this), race));
+                    } catch (OperationCanceledException e) {
+                        Log.i(TAG, "Engine@%08x: Loading cancelled for %s".formatted(System.identityHashCode(this), race));
+                    } catch (Exception e) {
+                        Log.w(TAG, "Engine@%08x: Failed to load animation: %s".formatted(System.identityHashCode(this), race), e);
+                        mViewModel.setErrorMessage(mContext.getString(R.string.error_loading_alien, race));
+                        mViewModel.setAnimation(null);
+                    } finally {
+                        mViewModel.setLoading(false);
+                    }
+                });
+            } catch (RejectedExecutionException ignored) {
+                mViewModel.setLoading(false);
+            }
         }
 
         @Override
         public void onDestroy() {
-            mHandler.removeCallbacks(mDrawComms);
-            if (this.isPreview()) {
-                Editor e = mPrefs.edit();
-                e.putInt(OFFSET_PREF, mOffset);
-                Log.d(TAG, String.format(Locale.US, "Saving offset (%d) to sharedPreferences: %s", mOffset, e.commit()));
+            Log.i(TAG, "Engine@%08x: onDestroy(preview=%b, flags=%d)".formatted(System.identityHashCode(this), mIsPreview, mWallpaperFlags));
+            synchronized (mActiveEngines) {
+                mActiveEngines.remove(this);
             }
+            if (mSettings != null) mSettings.removeListener(this);
+            mLoaderExecutor.shutdownNow();
+            mViewModel.stop();
+
+            Animation anim = mViewModel.getAnimation();
+            if (anim != null) try {
+                anim.close();
+            } catch (IOException ignored) {}
             super.onDestroy();
         }
 
         @Override
         public void onVisibilityChanged(boolean visible) {
-            mVisible = visible;
-            if (mVisible)
-                drawFrame();
-            else
-                mHandler.removeCallbacks(mDrawComms);
+            Log.i(TAG, "Engine@%08x: onVisibilityChanged(%b) [preview=%b, flags=%d]".formatted(System.identityHashCode(this), visible, mIsPreview, mWallpaperFlags));
+            mIsVisible = visible;
+            mViewModel.setVisible(visible);
+            if (visible) {
+                if (mViewModel.getAnimation() == null && !mViewModel.isLoading()) init_mAnim();
+            } else {
+                mViewModel.setAnimation(null);
+            }
         }
 
-        private Animation init_mAnim() {
-            // Failure to load these prefs should just fall back to defaults.
-            try {
-                mScaling = Integer.parseInt(mPrefs.getString(SettingsFragment.SCALING, "2"));
-                mFillFrame = mPrefs.getBoolean(SettingsFragment.FILL_FRAME, false);
-            } catch (Exception e) {
-                mScaling = 2;
-                mFillFrame = false;
+        private void init_mAnim() {
+            Log.d(TAG, "Engine@%08x: Triggering initial animation load.".formatted(System.identityHashCode(this)));
+            mViewModel.setScalingFactor(mSettings.scalingFactor);
+            mViewModel.setFillFrame(mSettings.fillFrame);
+            mViewModel.setUserOffset(mSettings.offset);
+            loadAnimation(mSettings.race);
+        }
+
+        @Override
+        public void onDesiredSizeChanged(int desiredWidth, int desiredHeight) {
+            super.onDesiredSizeChanged(desiredWidth, desiredHeight);
+            Log.d(TAG, "Engine@%08x: onDesiredSizeChanged(w=%d, h=%d)".formatted(System.identityHashCode(this), desiredWidth, desiredHeight));
+            applyNewTotalWidth(desiredWidth, 0);
+        }
+
+        private void updateTotalWidthFromManager(int currentSurfaceWidth) {
+            WallpaperManager wm = WallpaperManager.getInstance(mContext);
+            int newTotalWidth = wm.getDesiredMinimumWidth();
+            applyNewTotalWidth(newTotalWidth, currentSurfaceWidth);
+        }
+
+        private void applyNewTotalWidth(int newTotalWidth, int currentSurfaceWidth) {
+            if (newTotalWidth <= 0) return;
+
+            if (newTotalWidth != totalWidth) {
+                Log.d(TAG, "Engine@%08x: Updating totalWidth from %d to %d".formatted(System.identityHashCode(this), totalWidth, newTotalWidth));
+                setTotalWidth(newTotalWidth);
             }
-            // Otherwise, pitch a fit
-            try {
-                return new Animation(mPrefs.getString(SettingsFragment.ALIEN_RACE, "urquan"), mContext);
-            } catch (Exception e) {
-                Log.w(TAG, e.toString());
-                for (StackTraceElement t : e.getStackTrace()) {
-                    Log.d(TAG, t.toString());
-                }
-                return null;
+
+            if (currentSurfaceWidth > 0 && newTotalWidth == currentSurfaceWidth) {
+                Log.d(TAG, "Engine@%08x: Total width (%d) matches surface width. Scheduling re-check.".formatted(System.identityHashCode(this), newTotalWidth));
+                sLifecycleHandler.postDelayed(() -> updateTotalWidthFromManager(0), 500);
             }
         }
 
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
-            // NOTE(nic): On physical devices, occasionally a Surface object with negative height/width
-            //  will trigger this callback.  It does not appear to happen with emulators.  Lovely.
-            //  This is "junk data", and only serves to gum up state, so ignore it.
+            Log.d(TAG, "Engine@%08x: onSurfaceChanged(w=%d, h=%d)".formatted(System.identityHashCode(this), width, height));
             if (width < 0 || height < 0) return;
 
-            mWidth = width;
-            mHeight = height;
-            Log.d(TAG, String.format(Locale.US, "width(%04d) height(%04d) offset(%04d)", mWidth, mHeight, mOffset));
+            updateTotalWidthFromManager(width);
 
-            if (mAnim == null)
-                mAnim = init_mAnim();
-            if (mAnim != null)
-                setAspect(mAnim.getFrame());
-            drawFrame();
-        }
-
-        @Override
-        public void onSurfaceDestroyed(SurfaceHolder holder) {
-            mVisible = false;
-            mHandler.removeCallbacks(mDrawComms);
-            super.onSurfaceDestroyed(holder);
+            mViewModel.onSurfaceChanged(width, height);
+            Animation anim = mViewModel.getAnimation();
+            if (anim != null) {
+                Log.d(TAG, "Engine@%08x: onSurfaceChanged: Animation exists, updating aspect.".formatted(System.identityHashCode(this)));
+                mViewModel.updateAspect(anim.getFrame());
+            }
         }
 
         @Override
         public void onOffsetsChanged(float xOffset, float yOffset,
                                      float xStep, float yStep, int xPixels, int yPixels) {
-            Display d = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-            if ((d.getRotation() & 1) == 1)
-                mOffset = 0;
-            else
-                mOffset = (int) ((totalWidth.half - mUserOffset) * xOffset + mUserOffset);
-            Log.d(TAG, String.format(Locale.US, "xOffset(%f) yOffset(%f) xStep(%f) yStep(%f) xPixels(%d) yPixels(%d) mUserOffset(%d) mOffset(%d)",
-                    xOffset, yOffset, xStep, yStep, xPixels, yPixels, mUserOffset, mOffset));
-            drawFrame();
+            Log.v(TAG, "Engine@%08x: onOffsetsChanged(xOff=%.2f)".formatted(System.identityHashCode(this), xOffset));
+            boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+            mViewModel.onOffsetsChanged(xOffset, xStep, isLandscape);
         }
 
         @Override
         public void onTouchEvent(MotionEvent event) {
-            if (!this.isPreview()) return;
-            if (mScaling != 2) return;
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    mAnchor = (int) event.getX() - mOffset;
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    mOffset = (int) event.getX() - mAnchor;
-                    if (mOffset > 0) mOffset = 0;
-                    if (mOffset < totalWidth.half) mOffset = totalWidth.half;
-                    break;
-                case MotionEvent.ACTION_UP:
-                    mUserOffset = mOffset;
-                default:
-                    return;
-            }
-            Log.d(TAG, String.format(Locale.US, "mAnchor (%04d) mOffset(%04d)", mAnchor, mOffset));
+            if (!mIsPreview) return;
+            Log.v(TAG, "onTouchEvent: " + event);
+            mViewModel.onTouchEvent(event);
+            mSettings.updateOffset(mViewModel.getUserOffset());
+            mSettings.updateScalingFactor(mViewModel.getScalingFactor());
         }
 
-        private Bitmap blur(Bitmap inputBitmap) {
-            Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
-            // The input bitmaps are not multiples of 16 pixels wide, which causes zillions of warnings
-            // on API version 18 and up unless these Allocations are created long-form with a minimum of flags
-            Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_GRAPHICS_TEXTURE);
-            Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_GRAPHICS_TEXTURE);
-            theIntrinsic.setRadius(2.25f);
-            theIntrinsic.setInput(tmpIn);
-            theIntrinsic.forEach(tmpOut);
-            tmpOut.copyTo(outputBitmap);
-
-            tmpIn.destroy();
-            tmpOut.destroy();
-            return outputBitmap;
-        }
-
-        /*
-         * Draw one frame of the animation.  You can do any drawing you want in
-         * here.
-         */
         void drawFrame() {
             final SurfaceHolder holder = getSurfaceHolder();
             if (!holder.getSurface().isValid()) return;
-            // comm frame rate according to UQM sources
-            int delay = (1000 / 40);
 
-            final Canvas c = holder.lockCanvas();
+            final Canvas c = holder.lockHardwareCanvas();
+            if (c == null) return;
             try {
-                if (c == null) return;
-                // reset canvas
+                WallpaperViewModel vm = getViewModel();
+                Animation anim = vm.getAnimation();
+                int mWidth = vm.getWidth();
+                int mHeight = vm.getHeight();
+                boolean mFillFrame = vm.getFillFrame();
+                Rect destRect = vm.getDestRect();
+
                 c.drawColor(Color.BLACK);
-                if (mAnim == null) return;
-                // draw something
-                Bitmap b = mAnim.getFrame();
+                if (anim == null) {
+                    String error = vm.getErrorMessage();
+                    if (error != null) {
+                        drawStatusMessage(c, error, mWidth, mHeight, Typeface.BOLD_ITALIC);
+                    } else if (vm.isLoading()) {
+                        drawStatusMessage(c, mContext.getString(R.string.loading_assets), mWidth, mHeight, Typeface.ITALIC);
+                    }
+                    return;
+                }
+                Bitmap b = anim.getFrame();
                 if (b == null) return;
 
-                /*
-                 * Center the animation output on the screen, scaling the image as needed.
-                 * In the case of scaling mode #2 position it according to the virtual
-                 * screen offset.  This allows for the "parallax effect" that some
-                 * launchers support
-                 */
-                int x, y, w, h;
-                int aspectHeight = (b.getHeight() * mAspect) / 10000;
-                switch (mScaling) {
-                    case 1:
-                        x = 0;
-                        y = (mHeight - aspectHeight) / 2;
-                        w = mWidth;
-                        h = y + aspectHeight;
-                        break;
-                    case 2:
-                        x = mOffset;
-                        y = (mHeight - aspectHeight) / 2;
-                        w = x + totalWidth.full;
-                        h = y + aspectHeight;
-                        break;
-                    default:
-                        x = (mWidth - b.getWidth()) / 2;
-                        y = (mHeight - b.getHeight()) / 2;
-                        w = x + b.getWidth();
-                        h = y + b.getHeight();
-                }
-                mRect.set(x, y, w, h);
                 if (mFillFrame) {
                     mPaint.setAlpha(0x7F);
-                    bgRect.set(mOffset, 0, mOffset + totalWidth.full, mHeight);
-                    if (mScaling == 2) {
-                        int aspectWidth = (totalWidth.full * mAspect) / 200000;
-                        bgRect.left -= aspectWidth;
-                        bgRect.right += aspectWidth;
-                    }
-                    c.drawBitmap(blur(b), null, bgRect, mPaint);
-                    mPaint.setMaskFilter(null);
+                    int bgWidth = (int) (mHeight * ((float) b.getWidth() / b.getHeight()));
+                    int bgX = vm.getBackgroundOffset(bgWidth);
+                    bgRect.set(bgX, 0, bgX + bgWidth, mHeight);
+
+                    blurNode.setPosition(0, 0, c.getWidth(), c.getHeight());
+                    Canvas recordingCanvas = blurNode.beginRecording();
+                    recordingCanvas.drawBitmap(b, null, bgRect, mPaint);
+                    blurNode.endRecording();
+                    c.drawRenderNode(blurNode);
                     mPaint.setAlpha(0xFF);
                 }
-                c.drawBitmap(b, null, mRect, mPaint);
-                if (this.isPreview() && mScaling == 2) {
-                    w = mWidth / 2;
-                    h = mHeight / 5;
-                    TextPaint p = new TextPaint();
-                    p.setAntiAlias(true);
-                    p.setColor(Color.WHITE);
-
-                    p.setTextAlign(Paint.Align.CENTER);
-                    p.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-                    p.setTextSize(16 * getResources().getDisplayMetrics().density);
-                    String text = mContext.getString(R.string.set_center);
-                    StaticLayout.Builder builder = StaticLayout.Builder.obtain(text, 0, text.length(), p, mWidth);
-                    StaticLayout l = builder.build();
-                    c.translate(w, h - (l.getHeight() >> 1));
-                    l.draw(c);
+                c.drawBitmap(b, null, destRect, mPaint);
+                if (mIsPreview) {
+                    String hint = (destRect.width() > mWidth)
+                            ? mContext.getString(R.string.hint_drag_to_center)
+                            : mContext.getString(R.string.hint_pinch_only);
+                    drawStatusMessage(c, hint, mWidth, mHeight, Typeface.BOLD_ITALIC);
                 }
-                delay = mAnim.next_frame_delay;
             } finally {
-                if (c != null) holder.unlockCanvasAndPost(c);
-
-                // Reschedule the next redraw
-                mHandler.removeCallbacks(mDrawComms);
-                if (mVisible)
-                    mHandler.postDelayed(mDrawComms, delay);
+                holder.unlockCanvasAndPost(c);
             }
+        }
+
+        private void drawStatusMessage(Canvas c, String text, int width, int height, int style) {
+            float density = getResources().getDisplayMetrics().density;
+            TextPaint p = new TextPaint();
+            p.setAntiAlias(true);
+            p.setColor(Color.WHITE);
+            p.setShadowLayer(5.0f * density, 3.0f * density, 3.0f * density, Color.BLACK);
+            p.setTextAlign(Paint.Align.CENTER);
+            p.setTypeface(Typeface.defaultFromStyle(style));
+            p.setTextSize(16 * density);
+
+            StaticLayout l = StaticLayout.Builder.obtain(text, 0, text.length(), p, width).build();
+            c.save();
+            c.translate(width / 2f, (height / 2f) - (l.getHeight() >> 1));
+            l.draw(c);
+            c.restore();
+        }
+
+        @Override
+        public Bundle onCommand(String action, int x, int y, int z, Bundle extras, boolean resultRequested) {
+            Log.v(TAG, "Engine@%08x: onCommand(action=%s, flags=%d)".formatted(System.identityHashCode(this), action, mWallpaperFlags));
+            if (COMMAND_REAPPLY.equals(action) && sStagedSettings != null) {
+                Log.i(TAG, "Engine@%08x: REAPPLY received. Committing staged settings for adoption.".formatted(System.identityHashCode(this)));
+
+                synchronized (mActiveEngines) {
+                    // The user confirmed selection. Update target flags to match this engine's
+                    // destination, even if they were previously narrowed by a preview engine.
+                    sStagedSettings.setTargetFlags(mWallpaperFlags != 0 ? mWallpaperFlags : WallpaperManager.FLAG_SYSTEM);
+                    sStagedSettings.setState(WallpaperSettings.State.COMMITTED);
+                    checkAndAdoptSettings("onCommand:reapply");
+                }
+            }
+            return super.onCommand(action, x, y, z, extras, resultRequested);
         }
     }
 }

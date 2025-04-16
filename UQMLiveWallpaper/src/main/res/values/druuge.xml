@@ -116,16 +116,16 @@
   </integer-array>
   <string-array name="druuge">
     <item>druuge_content</item>
-    <item>druuge_anim10</item>
-    <item>druuge_anim9</item>
-    <item>druuge_anim8</item>
-    <item>druuge_anim7</item>
-    <item>druuge_anim6</item>
-    <item>druuge_anim5</item>
-    <item>druuge_anim4</item>
-    <item>druuge_anim3</item>
-    <item>druuge_anim2</item>
-    <item>druuge_anim1</item>
     <item>druuge_anim0</item>
+    <item>druuge_anim1</item>
+    <item>druuge_anim2</item>
+    <item>druuge_anim3</item>
+    <item>druuge_anim4</item>
+    <item>druuge_anim5</item>
+    <item>druuge_anim6</item>
+    <item>druuge_anim7</item>
+    <item>druuge_anim8</item>
+    <item>druuge_anim9</item>
+    <item>druuge_anim10</item>
   </string-array>
 </resources>

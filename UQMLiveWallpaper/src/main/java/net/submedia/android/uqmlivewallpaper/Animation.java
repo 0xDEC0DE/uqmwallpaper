@@ -16,57 +16,63 @@
 
 package net.submedia.android.uqmlivewallpaper;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.SystemClock;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.Supplier;
 
 //------------------------------------------------------------------------
 // Animation - a port of the C structs used in the UQM code for
 // this stuff
-class Animation {
+class Animation implements AutoCloseable {
 
     public static final String TAG = "UQMWallpaper.Animation";
 
     // comm frame rate according to UQM sources
     public static final int FRAME_RATE = (1000 / 40);
     static final int DEFAULT_FRAME_DELAY = 0x7FFFFFFF;
-    public int next_frame_delay;
+    public volatile int next_frame_delay;
 
-    public final byte RANDOM_ANIM = (1 << 0);
     // The next index is randomly chosen.
-    public final byte CIRCULAR_ANIM = (1 << 1);
+    public static final byte RANDOM_ANIM = (1 << 0);
     // After the last index has been reached, the animation starts over.
-    public final byte YOYO_ANIM = (1 << 2);
+    public static final byte CIRCULAR_ANIM = (1 << 1);
     // After the last index has been reached, the order that the
     // animation frames are used is reversed.
-    public final byte ANIM_MASK = (RANDOM_ANIM | CIRCULAR_ANIM | YOYO_ANIM);
+    public static final byte YOYO_ANIM = (1 << 2);
     // Mask of all animation types.
+    public static final byte ANIM_MASK = (RANDOM_ANIM | CIRCULAR_ANIM | YOYO_ANIM);
 
-    public final byte WAIT_TALKING = (1 << 3);
     // This is set in AlienTalkDesc when the ambient animations should
     // stop at the end of the current animation cycle.
     // In AlienAmbientArray, this is set for those ambient animations
     // which can not be active while the talking animation is active.
-    public final byte PAUSE_TALKING = (1 << 4);
-    public final byte TALK_INTRO = (1 << 5);
-    public final byte TALK_DONE = (1 << 6);
+    public static final byte WAIT_TALKING = (1 << 3);
+    public static final byte PAUSE_TALKING = (1 << 4);
+    public static final byte TALK_INTRO = (1 << 5);
+    public static final byte TALK_DONE = (1 << 6);
 
     // Silly Java, this won't lose precision!  Stop complaining...
-    public final byte ANIM_DISABLED = (byte) (1 << 7);
-    public final byte COLORXFORM_ANIM = PAUSE_TALKING;
+    public static final byte ANIM_DISABLED = (byte) (1 << 7);
+    public static final byte COLORXFORM_ANIM = PAUSE_TALKING;
 
     public enum Direction {
-        UP_DIR,        // Animation indices are increasing
-        DOWN_DIR,    // Animation indices are decreasing
+        UP_DIR,
+        DOWN_DIR,
         NO_DIR
     }
 
@@ -75,14 +81,25 @@ class Animation {
     private final Canvas canvas;
     private final Bitmap result;
     private final Random rand = new Random();
-    private int ActiveMask = 0;
 
     // TFB_Random() equivalent: rand.nextInt(0xFF), rand.nextInt(0xFFFF,), etc.
     // GetTimeCounter() equivalent: SystemClock.uptimeMillis()
     private long LastTime = SystemClock.uptimeMillis();
 
-    Animation(String alien_race, Context c)
-            throws Exception {
+    @VisibleForTesting
+    interface ContentFactory {
+        Content create(String[] alien_races, Context c, Supplier<Boolean> isCancelled) throws IOException;
+    }
+
+    private static ContentFactory sContentFactory = Content::new;
+
+    @VisibleForTesting
+    static void setContentFactory(ContentFactory factory) {
+        sContentFactory = factory;
+    }
+
+    @SuppressLint("DiscouragedApi")
+    Animation(String alien_race, Context c, Supplier<Boolean> isCancelled) throws Exception {
 
         // works around a crash bug with
         // android.content.res.getIdentifier() on 4.x
@@ -96,67 +113,99 @@ class Animation {
         if (resid == 0)
             throw new Exception("Could not find resource id for " + alien_race);
 
-        this.frame = new ArrayList<Frame>();
+        this.frame = new ArrayList<>();
 
         boolean first = true;
         for (String res : r.getStringArray(resid)) {
             if (first) {
-                this.content = new Content(r.getStringArray(r.getIdentifier(res, "array", PACKAGE_NAME)), c);
+                this.content = sContentFactory.create(r.getStringArray(r.getIdentifier(res, "array", PACKAGE_NAME)), c, isCancelled);
                 first = false;
             } else
                 this.frame.add(new Frame(r.getIntArray(r.getIdentifier(res, "array", PACKAGE_NAME))));
         }
         final Bitmap bg = this.content.frame.get(0).content;
-        this.result = bg.copy(bg.getConfig(), true);
+        this.result = bg.copy(Objects.requireNonNull(bg.getConfig()), true);
         this.canvas = new Canvas(this.result);
+        Log.d(TAG, "Animation initialized for race: " + alien_race);
+        Log.v(TAG, "Detailed animation data: " + this);
+    }
+
+    @VisibleForTesting
+    Animation(Content content, List<int[]> frameDefinitions, @Nullable Canvas canvas) {
+        this.content = content;
+        this.frame = new ArrayList<>();
+        for (int[] def : frameDefinitions) {
+            this.frame.add(new Frame(def));
+        }
+        final Bitmap bg = this.content.frame.get(0).content;
+        this.result = bg.copy(Objects.requireNonNull(bg.getConfig()), true);
+        this.canvas = canvas != null ? canvas : new Canvas(this.result);
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (content != null) content.close();
+        if (result != null && !result.isRecycled()) result.recycle();
+    }
+
+    // Getters for testing purposes
+    public List<Frame> getFrameList() {
+        return frame;
+    }
+
+    public Content getContent() {
+        return content;
     }
 
     private void DrawStamp(Content.Frame f) {
-        this.canvas.drawBitmap(f.content, f.hotspot.x, f.hotspot.y, null);
+        this.canvas.drawBitmap(f.content, f.hotspot.x(), f.hotspot.y(), null);
     }
 
     // a simplified implementation of ambient_anim_task from the UQM sources
     //
-    public Bitmap getFrame() {
+    public synchronized Bitmap getFrame() {
         long CurTime = SystemClock.uptimeMillis();
-        long ElapsedTicks = CurTime - this.LastTime;
+        long ElapsedTicks = Long.min(CurTime - this.LastTime, Integer.MAX_VALUE);
 
         this.next_frame_delay = DEFAULT_FRAME_DELAY;
         this.LastTime = CurTime;
+        int activeMask = 0;
 
         // scribble all the updates onto the canvas
         for (int i = 0; i < this.frame.size(); i++) {
             Frame f = this.frame.get(i);
             int ActiveBit = 1 << i;
+            boolean drawFrame = true;
 
-            // but not yet...
+            // ...unless it's disabled
+            if (ANIM_DISABLED == (f.AnimFlags & ANIM_DISABLED))
+                continue;
+
+            // ...or it's not time yet
             if (f.Alarm > ElapsedTicks) {
-                f.Alarm -= ElapsedTicks;
+                f.Alarm -= (int) ElapsedTicks;
+                drawFrame = false;
+            }
+            // If any animation that blocks this one is currently active, apply
+            // the restart delay and skip
+            else if ((activeMask & f.BlockMask) != 0) {
+                f.Alarm = f.randomRestartRate();
+                drawFrame = false;
+            }
+            if (!drawFrame) {
                 if (f.Alarm < this.next_frame_delay)
                     this.next_frame_delay = f.Alarm;
                 continue;
             }
-            if ((ActiveMask & f.BlockMask) != 0) {
-                f.Alarm = f.randomRestartRate();
-                continue;
-            } else {
-                ActiveMask |= ActiveBit;
-            }
-
-            // Log.d(TAG, String.format(Locale.US, "ActiveBit: %#x ActiveMask: %#x StartIndex: %d NumFrames: %d CurIndex: %d", ActiveBit, ActiveMask, f.StartIndex, f.NumFrames, f.CurIndex));
-
-            DrawStamp(this.content.frame.get(f.CurIndex));
-
-            // setup next iteration
-            f.Alarm = f.randomFrameRate();
-            if (f.Alarm < this.next_frame_delay)
-                this.next_frame_delay = f.Alarm;
+            activeMask |= ActiveBit;
+            // Log.v(TAG, "ActiveBit: %#x ActiveMask: %#x StartIndex: %d NumFrames: %d CurIndex: %d".formatted(ActiveBit, ActiveMask, f.StartIndex, f.NumFrames, f.CurIndex));
 
             final int num_frames = f.NumFrames - 1;
 
             if (COLORXFORM_ANIM == (f.AnimFlags & COLORXFORM_ANIM)) {
-                ActiveMask &= ~ActiveBit;
+                activeMask &= ~ActiveBit;
                 f.Alarm = 0;
+                drawFrame = false;
             } else if (YOYO_ANIM == (f.AnimFlags & YOYO_ANIM)) {
                 if (f.Direction == Direction.UP_DIR) {
                     f.CurIndex++;
@@ -170,7 +219,8 @@ class Animation {
                         f.Direction = Direction.UP_DIR;
                         f.CurIndex = f.StartIndex;
                         f.Alarm = f.randomRestartRate();
-                        ActiveMask &= ~ActiveBit;
+                        activeMask &= ~ActiveBit;
+                        drawFrame = false;
                     }
                 }
             } else if (CIRCULAR_ANIM == (f.AnimFlags & CIRCULAR_ANIM)) {
@@ -178,20 +228,29 @@ class Animation {
                 if (f.CurIndex > (f.StartIndex + num_frames)) {
                     f.CurIndex = f.StartIndex;
                     f.Alarm = f.randomRestartRate();
-                    ActiveMask &= ~ActiveBit;
+                    activeMask &= ~ActiveBit;
+                    drawFrame = false;
                 }
             } else if (RANDOM_ANIM == (f.AnimFlags & RANDOM_ANIM)) {
                 f.CurIndex = (short) (f.StartIndex + rand.nextInt(f.NumFrames));
-                ActiveMask &= ~ActiveBit;
+                activeMask &= ~ActiveBit;
             }
 
+            // Advance happened above; now draw the updated frame position.
+            // Skip the draw when we've just applied a restart delay (cycle boundary).
+            // setup next iteration alarm (only if not already set at boundary above)
+            if (drawFrame) {
+                DrawStamp(this.content.frame.get(f.CurIndex));
+                f.Alarm = f.randomFrameRate();
+            }
+            if (f.Alarm < this.next_frame_delay)
+                this.next_frame_delay = f.Alarm;
             // Log.d(TAG, f.toString());
         }
 
         if (this.next_frame_delay < FRAME_RATE || this.next_frame_delay == DEFAULT_FRAME_DELAY)
             this.next_frame_delay = FRAME_RATE;
 
-        // return the resulting bitmap
         return this.result;
     }
 
@@ -199,11 +258,10 @@ class Animation {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
+        String NEW_LINE = System.lineSeparator();
 
-        for (Frame f : this.frame) {
+        for (Frame f : this.frame)
             result.append(f.toString()).append(NEW_LINE);
-        }
         result.append(this.content.toString());
 
         return result.toString();
@@ -211,64 +269,60 @@ class Animation {
 
     //------------------------------------------------------------------------
     // Animation.Frame - The animation data with associated content
+    //
+    // These fields are 2x the size of their C counterparts, to avoid nonsense with sign bits.
     class Frame {
-
-        public short StartIndex;
         // Index of the first image
-        public byte NumFrames;
+        public final int StartIndex;
         // Number of frames in the animation.
-        public byte AnimFlags;
+        public final short NumFrames;
         // One of RANDOM_ANIM, CIRCULAR_ANIM, or YOYO_ANIM
-        public short BaseFrameRate;
-        public short RandomFrameRate;
-        public short BaseRestartRate;
-        public short RandomRestartRate;
-        public int BlockMask;
+        public final short AnimFlags;
+        public final int BaseFrameRate;
+        public final int RandomFrameRate;
+        public final int BaseRestartRate;
+        public final int RandomRestartRate;
         // Bit mask of the indices of all animations that can not
         // be active at the same time as this animation.
-
+        public final int BlockMask;
         public Direction Direction;
-        public byte CurFrame;
-        public short CurIndex;
+        public int CurIndex;
         public int Alarm;
 
         Frame(int[] i) {
-            this.StartIndex = (short) i[0];
-            this.NumFrames = (byte) i[1];
-            this.AnimFlags = (byte) i[2];
-            this.BaseFrameRate = (short) i[3];
-            this.RandomFrameRate = (short) i[4];
-            this.BaseRestartRate = (short) i[5];
-            this.RandomRestartRate = (short) i[6];
+            this.StartIndex = 0xFFFF & i[0];
+            this.NumFrames = (short) Math.max(1, i[1] & 0xFF);
+            this.AnimFlags = (short) ((i[2] & Animation.ANIM_MASK) != 0
+                    ? (i[2] & 0xFF)
+                    : Animation.ANIM_DISABLED);
+            this.BaseFrameRate = Math.max(1, 0xFFFF & i[3]);
+            this.RandomFrameRate = Math.max(1, 0xFFFF & i[4]);
+            this.BaseRestartRate = Math.max(1, 0xFFFF & i[5]);
+            this.RandomRestartRate = Math.max(1, 0xFFFF & i[6]);
             this.BlockMask = i[7];
 
             this.Direction = Animation.Direction.UP_DIR;
-            this.CurFrame = 0;
-            this.CurIndex = this.StartIndex;
+            // For YOYO, initialize to the first frame; for all others, initialize to the last
+            // frame, so that the first advance wraps and lands on StartIndex.
+            this.CurIndex = (AnimFlags & YOYO_ANIM) != 0
+                    ? this.StartIndex
+                    : this.StartIndex + (this.NumFrames - 1);
             this.Alarm = this.randomRestartRate();
         }
 
-        // stupid sign bits...
         public int randomFrameRate() {
-            return 1 + this.BaseFrameRate + rand.nextInt(DEFAULT_FRAME_DELAY) % (this.RandomFrameRate + 1);
+            return BaseFrameRate + rand.nextInt(RandomFrameRate);
         }
 
         public int randomRestartRate() {
-            return 1 + this.BaseRestartRate + rand.nextInt(DEFAULT_FRAME_DELAY) % (this.RandomRestartRate + 1);
+            return BaseRestartRate + rand.nextInt(RandomRestartRate);
         }
 
         @NonNull
         @Override
         public String toString() {
-            return String.format(Locale.US, "Start[%05d] Frames[%02d] Flags[%02d] FrameRate[%05d] FrameRate2[%05d] Restart[%05d] Restart2[%05d] Block[%010d]",
-                    this.StartIndex,
-                    this.NumFrames,
-                    this.AnimFlags,
-                    this.BaseFrameRate,
-                    this.RandomFrameRate,
-                    this.BaseRestartRate,
-                    this.RandomRestartRate,
-                    this.BlockMask);
+            return "Start[%05d] Frames[%02d] Flags[%02d] FrameRate[%05d] FrameRate2[%05d] Restart[%05d] Restart2[%05d] Block[%010d]".formatted(
+                    StartIndex, NumFrames, AnimFlags, BaseFrameRate, RandomFrameRate, BaseRestartRate, RandomRestartRate, BlockMask);
         }
     }
 }

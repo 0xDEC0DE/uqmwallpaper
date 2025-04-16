@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/app_settings">
-    <ListPreference
-        android:defaultValue="urquan"
-        android:entries="@array/racesNames"
-        android:entryValues="@array/races"
-        android:key="race"
-        android:summary="@string/alien_summary"
-        android:title="@string/alien_title" />
-    <ListPreference
-        android:defaultValue="2"
-        android:entries="@array/scalingDesc"
-        android:entryValues="@array/scaling"
-        android:key="scaling"
-        android:title="@string/scaling_title" />
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="fillframe"
-        android:title="Fill Frame"
-        />
-    <Preference
-        android:key="version"
-        android:title="@string/version_title" />
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory>
+        <ListPreference
+            app:defaultValue="urquan"
+            app:entries="@array/racesNames"
+            app:entryValues="@array/races"
+            app:key="race"
+            app:summary="@string/alien_summary"
+            app:title="@string/alien_title" />
+        <Preference
+            app:defaultValue="100"
+            app:key="scalingfactor"
+            app:isPreferenceVisible="false"
+            app:title="Scaling Factor" />
+        <ListPreference
+            app:defaultValue="2"
+            app:entries="@array/scalingDesc"
+            app:entryValues="@array/scaling"
+            app:key="scaling"
+            app:isPreferenceVisible="false"
+            app:title="@string/scaling_title" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="fillframe"
+            app:title="Fill Frame" />
+        <Preference
+            app:key="version"
+            app:selectable="false"
+            app:title="@string/version_title" />
+    </PreferenceCategory>
 </PreferenceScreen>

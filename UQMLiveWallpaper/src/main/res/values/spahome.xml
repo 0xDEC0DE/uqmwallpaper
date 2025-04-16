@@ -147,19 +147,19 @@
   </integer-array>
   <string-array name="spahome">
     <item>spahome_content</item>
-    <item>spahome_anim13</item>
-    <item>spahome_anim12</item>
-    <item>spahome_anim11</item>
-    <item>spahome_anim10</item>
-    <item>spahome_anim9</item>
-    <item>spahome_anim8</item>
-    <item>spahome_anim7</item>
-    <item>spahome_anim6</item>
-    <item>spahome_anim5</item>
-    <item>spahome_anim4</item>
-    <item>spahome_anim3</item>
-    <item>spahome_anim2</item>
-    <item>spahome_anim1</item>
     <item>spahome_anim0</item>
+    <item>spahome_anim1</item>
+    <item>spahome_anim2</item>
+    <item>spahome_anim3</item>
+    <item>spahome_anim4</item>
+    <item>spahome_anim5</item>
+    <item>spahome_anim6</item>
+    <item>spahome_anim7</item>
+    <item>spahome_anim8</item>
+    <item>spahome_anim9</item>
+    <item>spahome_anim10</item>
+    <item>spahome_anim11</item>
+    <item>spahome_anim12</item>
+    <item>spahome_anim13</item>
   </string-array>
 </resources>

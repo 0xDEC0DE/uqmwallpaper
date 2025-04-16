@@ -6,4 +6,4 @@
     android:author="@string/app_author"
     android:description="@string/app_desc"
     android:settingsActivity="net.submedia.android.uqmlivewallpaper.SettingsActivity"
-    android:thumbnail="@drawable/ic_launcher_wallpaper" />
+    android:thumbnail="@mipmap/ic_launcher_wallpaper" />

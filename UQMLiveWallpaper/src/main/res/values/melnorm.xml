@@ -47,9 +47,9 @@
   </integer-array>
   <string-array name="melnorm">
     <item>melnorm_content</item>
-    <item>melnorm_anim3</item>
-    <item>melnorm_anim2</item>
-    <item>melnorm_anim1</item>
     <item>melnorm_anim0</item>
+    <item>melnorm_anim1</item>
+    <item>melnorm_anim2</item>
+    <item>melnorm_anim3</item>
   </string-array>
 </resources>

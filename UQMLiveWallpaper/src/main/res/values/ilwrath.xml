@@ -46,9 +46,9 @@
   </integer-array>
   <string-array name="ilwrath">
     <item>ilwrath_content</item>
-    <item>ilwrath_anim3</item>
-    <item>ilwrath_anim2</item>
-    <item>ilwrath_anim1</item>
     <item>ilwrath_anim0</item>
+    <item>ilwrath_anim1</item>
+    <item>ilwrath_anim2</item>
+    <item>ilwrath_anim3</item>
   </string-array>
 </resources>

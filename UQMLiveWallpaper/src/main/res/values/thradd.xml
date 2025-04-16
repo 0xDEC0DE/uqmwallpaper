@@ -87,13 +87,13 @@
   </integer-array>
   <string-array name="thradd">
     <item>thradd_content</item>
-    <item>thradd_anim7</item>
-    <item>thradd_anim6</item>
-    <item>thradd_anim5</item>
-    <item>thradd_anim4</item>
-    <item>thradd_anim3</item>
-    <item>thradd_anim2</item>
-    <item>thradd_anim1</item>
     <item>thradd_anim0</item>
+    <item>thradd_anim1</item>
+    <item>thradd_anim2</item>
+    <item>thradd_anim3</item>
+    <item>thradd_anim4</item>
+    <item>thradd_anim5</item>
+    <item>thradd_anim6</item>
+    <item>thradd_anim7</item>
   </string-array>
 </resources>

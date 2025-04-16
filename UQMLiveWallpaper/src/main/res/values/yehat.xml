@@ -156,20 +156,20 @@
   </integer-array>
   <string-array name="yehat">
     <item>yehat_content</item>
-    <item>yehat_anim14</item>
-    <item>yehat_anim13</item>
-    <item>yehat_anim12</item>
-    <item>yehat_anim11</item>
-    <item>yehat_anim10</item>
-    <item>yehat_anim9</item>
-    <item>yehat_anim8</item>
-    <item>yehat_anim7</item>
-    <item>yehat_anim6</item>
-    <item>yehat_anim5</item>
-    <item>yehat_anim4</item>
-    <item>yehat_anim3</item>
-    <item>yehat_anim2</item>
-    <item>yehat_anim1</item>
     <item>yehat_anim0</item>
+    <item>yehat_anim1</item>
+    <item>yehat_anim2</item>
+    <item>yehat_anim3</item>
+    <item>yehat_anim4</item>
+    <item>yehat_anim5</item>
+    <item>yehat_anim6</item>
+    <item>yehat_anim7</item>
+    <item>yehat_anim8</item>
+    <item>yehat_anim9</item>
+    <item>yehat_anim10</item>
+    <item>yehat_anim11</item>
+    <item>yehat_anim12</item>
+    <item>yehat_anim13</item>
+    <item>yehat_anim14</item>
   </string-array>
 </resources>

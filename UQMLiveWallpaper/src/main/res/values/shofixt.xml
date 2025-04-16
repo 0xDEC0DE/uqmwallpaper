@@ -117,16 +117,16 @@
   </integer-array>
   <string-array name="shofixt">
     <item>shofixt_content</item>
-    <item>shofixt_anim10</item>
-    <item>shofixt_anim9</item>
-    <item>shofixt_anim8</item>
-    <item>shofixt_anim7</item>
-    <item>shofixt_anim6</item>
-    <item>shofixt_anim5</item>
-    <item>shofixt_anim4</item>
-    <item>shofixt_anim3</item>
-    <item>shofixt_anim2</item>
-    <item>shofixt_anim1</item>
     <item>shofixt_anim0</item>
+    <item>shofixt_anim1</item>
+    <item>shofixt_anim2</item>
+    <item>shofixt_anim3</item>
+    <item>shofixt_anim4</item>
+    <item>shofixt_anim5</item>
+    <item>shofixt_anim6</item>
+    <item>shofixt_anim7</item>
+    <item>shofixt_anim8</item>
+    <item>shofixt_anim9</item>
+    <item>shofixt_anim10</item>
   </string-array>
 </resources>

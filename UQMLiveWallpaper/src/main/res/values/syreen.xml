@@ -156,20 +156,20 @@
   </integer-array>
   <string-array name="syreen">
     <item>syreen_content</item>
-    <item>syreen_anim14</item>
-    <item>syreen_anim13</item>
-    <item>syreen_anim12</item>
-    <item>syreen_anim11</item>
-    <item>syreen_anim10</item>
-    <item>syreen_anim9</item>
-    <item>syreen_anim8</item>
-    <item>syreen_anim7</item>
-    <item>syreen_anim6</item>
-    <item>syreen_anim5</item>
-    <item>syreen_anim4</item>
-    <item>syreen_anim3</item>
-    <item>syreen_anim2</item>
-    <item>syreen_anim1</item>
     <item>syreen_anim0</item>
+    <item>syreen_anim1</item>
+    <item>syreen_anim2</item>
+    <item>syreen_anim3</item>
+    <item>syreen_anim4</item>
+    <item>syreen_anim5</item>
+    <item>syreen_anim6</item>
+    <item>syreen_anim7</item>
+    <item>syreen_anim8</item>
+    <item>syreen_anim9</item>
+    <item>syreen_anim10</item>
+    <item>syreen_anim11</item>
+    <item>syreen_anim12</item>
+    <item>syreen_anim13</item>
+    <item>syreen_anim14</item>
   </string-array>
 </resources>

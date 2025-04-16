@@ -87,13 +87,13 @@
   </integer-array>
   <string-array name="blackur">
     <item>blackur_content</item>
-    <item>blackur_anim7</item>
-    <item>blackur_anim6</item>
-    <item>blackur_anim5</item>
-    <item>blackur_anim4</item>
-    <item>blackur_anim3</item>
-    <item>blackur_anim2</item>
-    <item>blackur_anim1</item>
     <item>blackur_anim0</item>
+    <item>blackur_anim1</item>
+    <item>blackur_anim2</item>
+    <item>blackur_anim3</item>
+    <item>blackur_anim4</item>
+    <item>blackur_anim5</item>
+    <item>blackur_anim6</item>
+    <item>blackur_anim7</item>
   </string-array>
 </resources>

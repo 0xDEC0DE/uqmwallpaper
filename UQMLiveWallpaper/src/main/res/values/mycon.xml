@@ -56,10 +56,10 @@
   </integer-array>
   <string-array name="mycon">
     <item>mycon_content</item>
-    <item>mycon_anim4</item>
-    <item>mycon_anim3</item>
-    <item>mycon_anim2</item>
-    <item>mycon_anim1</item>
     <item>mycon_anim0</item>
+    <item>mycon_anim1</item>
+    <item>mycon_anim2</item>
+    <item>mycon_anim3</item>
+    <item>mycon_anim4</item>
   </string-array>
 </resources>

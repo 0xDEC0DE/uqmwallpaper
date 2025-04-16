@@ -1,25 +1,73 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
+
+def gitVersionName = providers.exec {
+    commandLine 'git', 'describe', '--tags', '--always', '--abbrev=0'
+    ignoreExitValue = true
+}.standardOutput.asText.get().trim() ?: "UNKNOWN"
+
+def gitVersionCode = (gitVersionName.replaceAll(/\D/, "") ?: "1").toInteger()
 
 android {
-    compileSdk 33
+    compileSdk 36
+    namespace = 'net.submedia.android.uqmlivewallpaper'
 
     defaultConfig {
-        applicationId "net.submedia.android.uqmlivewallpaper"
-        minSdkVersion 28
-        targetSdk 33
+        applicationId = "net.submedia.android.uqmlivewallpaper"
+        minSdkVersion 34
+        targetSdk 36
+        versionCode gitVersionCode
+        versionName gitVersionName
     }
 
     buildTypes {
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            debuggable false
+            minifyEnabled = true
+            proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt')
+            debuggable = false
         }
     }
-    namespace 'net.submedia.android.uqmlivewallpaper'
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        resValues = true
+        buildConfig = true
+    }
+
+    androidResources {
+        noCompress 'uqm'
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            all {
+                jvmArgs '-noverify'
+            }
+        }
+    }
+}
+
+// For JimFS
+configurations.configureEach {
+    resolutionStrategy.capabilitiesResolution.withCapability("com.google.guava:listenablefuture") {
+        select("com.google.guava:guava:0")
+    }
 }
 
 dependencies {
+    implementation 'androidx.activity:activity:1.12.4'
     implementation 'androidx.preference:preference:1.2.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'org.apache.commons:commons-compress:1.28.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.22.0'
+    testImplementation 'com.google.jimfs:jimfs:1.3.1'
+    testImplementation 'androidx.fragment:fragment-testing:1.8.9'
+    testImplementation 'org.robolectric:robolectric:4.16.1'
 }

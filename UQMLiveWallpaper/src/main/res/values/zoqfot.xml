@@ -37,8 +37,8 @@
   </integer-array>
   <string-array name="zoqfot">
     <item>zoqfot_content</item>
-    <item>zoqfot_anim2</item>
-    <item>zoqfot_anim1</item>
     <item>zoqfot_anim0</item>
+    <item>zoqfot_anim1</item>
+    <item>zoqfot_anim2</item>
   </string-array>
 </resources>

@@ -5,7 +5,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath 'com.android.tools.build:gradle:9.1.0'
     }
 }
 
@@ -14,7 +14,35 @@ allprojects {
         mavenCentral()
         google()
     }
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+}
+
+subprojects {
+    tasks.register("checkAssetsDirectory") {
+        // Capture properties at configuration time to support configuration cache
+        def assetsDir = project.file('src/main/assets')
+        def projectName = project.name
+
+        doLast {
+            // First check that the directory exists
+            if (!assetsDir.exists() || !assetsDir.isDirectory()) {
+                throw new GradleException("${projectName}: Required directory src/main/assets does not exist")
+            }
+
+            // Then check for .uqm files
+            def uqmFiles = assetsDir.listFiles()?.findAll { it.name.endsWith('.uqm') }
+            if (uqmFiles == null || uqmFiles.isEmpty()) {
+                throw new GradleException("${projectName}: No .uqm files found in src/main/assets directory")
+            }
+            // At some point we should remove unused assets from the content pack:
+            // zip -v -d *.uqm 'base/[^c]*' 'base/cutscene/*' '*.txt' '*.mod' '*.ct'
+        }
+    }
+
+    // Ensure compilation depends on the assets check
+    tasks.withType(JavaCompile).configureEach {
+        dependsOn "checkAssetsDirectory"
     }
 }

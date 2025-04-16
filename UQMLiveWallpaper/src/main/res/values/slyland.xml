@@ -68,11 +68,11 @@
   </integer-array>
   <string-array name="slyland">
     <item>slyland_content</item>
-    <item>slyland_anim5</item>
-    <item>slyland_anim4</item>
-    <item>slyland_anim3</item>
-    <item>slyland_anim2</item>
-    <item>slyland_anim1</item>
     <item>slyland_anim0</item>
+    <item>slyland_anim1</item>
+    <item>slyland_anim2</item>
+    <item>slyland_anim3</item>
+    <item>slyland_anim4</item>
+    <item>slyland_anim5</item>
   </string-array>
 </resources>

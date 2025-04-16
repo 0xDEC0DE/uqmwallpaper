@@ -66,11 +66,11 @@
   </integer-array>
   <string-array name="chmmr">
     <item>chmmr_content</item>
-    <item>chmmr_anim5</item>
-    <item>chmmr_anim4</item>
-    <item>chmmr_anim3</item>
-    <item>chmmr_anim2</item>
-    <item>chmmr_anim1</item>
     <item>chmmr_anim0</item>
+    <item>chmmr_anim1</item>
+    <item>chmmr_anim2</item>
+    <item>chmmr_anim3</item>
+    <item>chmmr_anim4</item>
+    <item>chmmr_anim5</item>
   </string-array>
 </resources>

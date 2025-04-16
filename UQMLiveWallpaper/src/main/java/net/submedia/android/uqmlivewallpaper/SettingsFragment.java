@@ -16,87 +16,72 @@
 
 package net.submedia.android.uqmlivewallpaper;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
+import android.app.WallpaperManager;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-public class SettingsFragment
-        extends PreferenceFragmentCompat
-        implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private static final String TAG = "UQMWallpaper.SettingsFragment";
     public static final String ALIEN_RACE = "race";
     public static final String SCALING = "scaling";
+    public static final String SCALING_FACTOR = "scalingfactor";
     public static final String VERSION = "version";
     public static final String FILL_FRAME = "fillframe";
-    static public SharedPreferences prefs;
-    private ListPreference mAlien;
-    private ListPreference mScaling;
 
     @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
+        // Use the staged settings from the Wallpaper service as the data store
+        WallpaperSettings staged = UQMWallpaper.getStagedSettings();
+        if (staged != null) {
+            getPreferenceManager().setPreferenceDataStore(staged);
+        } else {
+            // If no staged session is active, edit the live settings directly
+            int targetFlags = requireActivity().getIntent().getIntExtra(SettingsActivity.EXTRA_TARGET_FLAGS, WallpaperManager.FLAG_SYSTEM);
+
+            // Belt-and-braces: mask off invalid values from target flags
+            targetFlags &= WallpaperManager.FLAG_SYSTEM | WallpaperManager.FLAG_LOCK;
+
+            WallpaperSettings live = UQMWallpaper.getLiveSettings(targetFlags);
+            if (live != null) getPreferenceManager().setPreferenceDataStore(live);
+        }
+
         setPreferencesFromResource(R.xml.settings, rootKey);
-        mAlien = findPreference(ALIEN_RACE);
-        mScaling = findPreference(SCALING);
-        Preference mVersion = findPreference(VERSION);
-        if (mVersion != null)
-            mVersion.setSummary(getVersionName(getContext()));
 
-        prefs = getPreferenceManager().getSharedPreferences();
-        set_summary_for(mAlien, ALIEN_RACE, prefs);
-        set_summary_for(mScaling, SCALING, prefs);
+        setupPreference(ALIEN_RACE);
+        setupPreference(SCALING);
+        setupPreference(FILL_FRAME);
+        setupVersionPreference();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    protected void setupPreference(String key) {
+        Preference preference = findPreference(key);
+        configurePreference(preference, () -> requireActivity().finish());
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        switch (key) {
-            case ALIEN_RACE:
-                set_summary_for(mAlien, key, prefs);
-                break;
-            case SCALING:
-                set_summary_for(mScaling, key, prefs);
-                break;
+    @VisibleForTesting
+    static void configurePreference(Preference preference, Runnable onChangeAction) {
+        if (preference != null) {
+            if (preference instanceof ListPreference)
+                preference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+            preference.setOnPreferenceChangeListener((pref, newValue) -> {
+                if (onChangeAction != null) onChangeAction.run();
+                return true;
+            });
         }
-        requireActivity().finish();
     }
 
-    private void set_summary_for(ListPreference l, String key, SharedPreferences prefs) {
-        String buf;
-        if ((buf = prefs.getString(key, null)) != null)
-            l.setSummary(get_by_value(l, buf));
+    protected void setupVersionPreference() {
+        Preference versionPref = findPreference(VERSION);
+        if (versionPref != null) versionPref.setSummary(getVersionName());
     }
 
-    private String get_by_value(ListPreference l, String buf) {
-        return (String) l.getEntries()[l.findIndexOfValue(buf)];
-    }
-
-    private String getVersionName(Context c) {
-        try {
-            PackageInfo pi = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
-            if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0)
-                return pi.versionName;
-            else
-                return pi.versionName + "-debug";
-        } catch (Exception e) {
-            return "UNKNOWN";
-        }
+    @VisibleForTesting
+    static String getVersionName() {
+        return BuildConfig.VERSION_NAME + (BuildConfig.DEBUG ? "-debug" : "");
     }
 }

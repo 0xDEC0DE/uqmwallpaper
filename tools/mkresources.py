@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """usage: mkresources.py input_file [input_file] [...]"""
 
@@ -12,6 +12,25 @@
 #	git clone https://github.com/inducer/pycparserext.git
 #	cd pycparserext
 #	python setup.py install
+
+WARNING = """
+------------------------------------------------------------------------
+WARNING: THIS CODE SHOULD NOT BE CONSIDERED FIT FOR PURPOSE!
+
+The original version was written against Python 2.x and a GCC
+toolchain on MacOS X for PowerPC.  At some point, it got run
+through `2to3`, but even so, the world today is a VERY different
+place than what this tool assumes.  But the need to use it has
+not come up in well over a decade, so we'll leave it be.
+
+If there is a genuine need to regenerate resources, then this
+tool should be viewed as a starting point for a rewrite, and its
+only use should be as an archaeological reference.  You have been
+warned.
+------------------------------------------------------------------------
+"""
+import sys
+sys.exit(WARNING + "Aborting...")  # XXX(nic): remove this if you know what you are doing
 
 import os
 import sys
@@ -306,6 +325,7 @@ if __name__ == "__main__":
 		os.unlink(tmp)
 
 	for arg in sys.argv[1:]:
+		print(WARNING, file=sys.stderr)
 		main(arg, tmp)
 
 #------------------------------------------------------------------------

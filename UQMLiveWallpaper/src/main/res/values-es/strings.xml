@@ -2,12 +2,15 @@
 <resources>
     <string name="app_name">Ur-Quan Masters Fondo de Pantalla Animado</string>
     <string name="app_desc">Las Animaciones de Ur-Quan Masters</string>
-    <string name="preferences_label">Ajustes</string>
-    <string name="app_settings">Configuración de Ur-Quan Masters Fondo de Pantalla Animado</string>
+    <string name="app_settings">Configuración del fondo de pantalla animado de The Ur-Quan Masters</string>
     <string name="app_author">Nicolas Simonds</string>
-    <string name="alien_title">Extraterrestre</string>
-    <string name="alien_summary">Elegir el Extraterrestre para Mostrar</string>
-    <string name="scaling_title">Interpolar Fondo de Pantalla</string>
-    <string name="version_title">Versión de Aplicación</string>
-    <string name="set_center">Desplácese para establecer el centro</string>
+    <string name="alien_title">Alienígena</string>
+    <string name="alien_summary">Elige el alienígena a mostrar</string>
+    <string name="scaling_title">Redimensionar fondo de pantalla</string>
+    <string name="version_title">Versión de la aplicación</string>
+    <string name="hint_pinch_only">Pellizcar para ampliar</string>
+    <string name="hint_drag_to_center">Pellizcar para ampliar\nArrastrar para centrar</string>
+    <string name="error_loading_alien">Error al cargar %s</string>
+    <string name="unsupported_device">Los fondos de pantalla animados no son compatibles con este dispositivo.</string>
+    <string name="loading_assets">Cargando recursos…</string>
 </resources>

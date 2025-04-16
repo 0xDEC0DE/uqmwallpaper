@@ -46,9 +46,9 @@
   </integer-array>
   <string-array name="supox">
     <item>supox_content</item>
-    <item>supox_anim3</item>
-    <item>supox_anim2</item>
-    <item>supox_anim1</item>
     <item>supox_anim0</item>
+    <item>supox_anim1</item>
+    <item>supox_anim2</item>
+    <item>supox_anim3</item>
   </string-array>
 </resources>
