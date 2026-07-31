@@ -228,17 +228,17 @@ public class ContentTest extends BaseTest {
     public void testAniToFileList() throws IOException {
         T = new ContentFixture();
         String alienRace = createString();
+        String aniFilename = alienRace + ".ani";
         String pngFilename1 = createString() + ".png";
         String pngFilename2 = createString() + ".png";
-        String aniFilename = createString() + ".ani";
         Coord hotspot = new Coord(rand.nextInt(-100, 100), rand.nextInt(-100, 100));
         Coord size = new Coord(rand.nextInt(320), rand.nextInt(240));
         String fakeAni = " %d %d %d %d".formatted(size.x(), size.y(), hotspot.x(), hotspot.y());
 
         Map<String, byte[]> zipContents = new HashMap<>();
-        String aniFile = "comm/%s/%s".formatted(alienRace, aniFilename);
-        String pngFile1 = "comm/%s/%s".formatted(alienRace, pngFilename1);
-        String pngFile2 = "comm/%s/%s".formatted(alienRace, pngFilename2);
+        String aniFile = "base/comm/%s/%s".formatted(alienRace, aniFilename);
+        String pngFile1 = "base/comm/%s/%s".formatted(alienRace, pngFilename1);
+        String pngFile2 = "base/comm/%s/%s".formatted(alienRace, pngFilename2);
         zipContents.put(aniFile, createAniContent(List.of(pngFilename1 + fakeAni, pngFilename2 + fakeAni)));
         zipContents.put(pngFile1, createPngContent());
         zipContents.put(pngFile2, createPngContent());
@@ -297,48 +297,6 @@ public class ContentTest extends BaseTest {
         }
     }
 
-    @Test
-    public void testListFilesMatching() throws IOException {
-        T = new ContentFixture();
-        String alienRace = createString();
-        String pngFilename = createString() + ".png";
-        String aniFilename = createString() + ".ani";
-        Coord hotspot = new Coord(rand.nextInt(-100, 100), rand.nextInt(-100, 100));
-        Coord size = new Coord(rand.nextInt(320), rand.nextInt(240));
-        String fakeAni = " %d %d %d %d".formatted(size.x(), size.y(), hotspot.x(), hotspot.y());
-
-        Map<String, byte[]> zipContents = new HashMap<>();
-        String aniFile = "comm/%s/%s".formatted(alienRace, aniFilename);
-        String pngFile = "comm/%s/%s".formatted(alienRace, pngFilename);
-        zipContents.put(aniFile, createAniContent(List.of(pngFilename + fakeAni)));
-        zipContents.put(pngFile, createPngContent());
-
-        String suffix = createString();
-        List<String> matching = new ArrayList<>();
-        int count = rand.nextInt(5, 20);
-        for (int i = 0; i < count; i++) {
-            String pathname = "%s/%s/%s.%s".formatted(createString(), createString(), createString(), suffix);
-            matching.add(pathname);
-            zipContents.put(pathname, createPngContent());
-        }
-
-        T.setAlienRace(alienRace)
-                .setPngFilename(pngFilename)
-                .setAniFilename(aniFilename)
-                .setHotspot(hotspot)
-                .setSize(size);
-        T.createAndSetZipFile(zipContents);
-        T.setup(this);
-
-        try (Content content = T.build(this)) {
-            List<String> result = content.listFilesMatching(".*\\." + suffix);
-            Assert.assertNotNull(result);
-            Assert.assertEquals(count, result.size());
-            Assert.assertTrue(result.containsAll(matching));
-            Assert.assertFalse(result.contains(pngFile));
-        }
-    }
-
     /* ------------------------------------------------------------------------
      * Content.Frame Tests
      * -----------------------------------------------------------------------*/
@@ -358,7 +316,7 @@ public class ContentTest extends BaseTest {
             frame = content.frame.get(0);
         }
 
-        Assert.assertEquals("comm/%s/%s".formatted(alienRace, pngFilename), frame.filename);
+        Assert.assertEquals("base/comm/%s/%s".formatted(alienRace, pngFilename), frame.filename);
         Assert.assertEquals((float) hotspot.x(), frame.hotspot.x(), 0);
         Assert.assertEquals((float) hotspot.y(), frame.hotspot.y(), 0);
     }
@@ -374,7 +332,7 @@ public class ContentTest extends BaseTest {
         String fakeAni = " %d %d %d %d".formatted(size.x(), size.y(), hotspot.x(), hotspot.y());
 
         Map<String, byte[]> zipContents = new HashMap<>();
-        String aniFile = "comm/%s/%s".formatted(alienRace, aniFilename);
+        String aniFile = "base/comm/%s/%s".formatted(alienRace, aniFilename);
         zipContents.put(aniFile, createAniContent(List.of(pngFilename + fakeAni)));
 
         T.setAlienRace(alienRace)

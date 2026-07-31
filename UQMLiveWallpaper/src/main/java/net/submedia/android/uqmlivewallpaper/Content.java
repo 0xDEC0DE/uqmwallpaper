@@ -76,18 +76,19 @@ public class Content implements AutoCloseable {
         }
     }
 
+    // NOTE(nic): this assumes a static location in the content pack, which is safe now that
+    //  the content pack is bundled with the app.  Previous versions allows for user-supplied
+    //  packs, if you want that behaviour back, check the commit history for `listFilesMatching`
     private void loadFrames(String[] alien_races, Supplier<Boolean> isCancelled) throws IOException {
-        List<String> races = listFilesMatching(".*comm/.*\\.ani");
-
-        for (String file : races) {
-            for (String alien_race : alien_races) {
-                if (file.contains("/" + alien_race + "/")) {
-                    for (String frame : aniToFileList(file)) {
-                        if (isCancelled.get()) throw new OperationCanceledException();
-                        this.frame.add(new Frame(frame, isCancelled));
-                    }
-                    return;
+        for (String alien_race : alien_races) {
+            String file = "base/comm/%s/%s.ani".formatted(alien_race, alien_race);
+            ZipArchiveEntry entry = this.zipfile.getEntry(file);
+            if (entry != null) {
+                for (String frame : aniToFileList(file)) {
+                    if (isCancelled.get()) throw new OperationCanceledException();
+                    this.frame.add(new Frame(frame, isCancelled));
                 }
+                return;
             }
         }
         throw new IOException("error loading content, tried " + Arrays.toString(alien_races));
@@ -145,13 +146,6 @@ public class Content implements AutoCloseable {
             }
             throw e;
         }
-    }
-
-    protected List<String> listFilesMatching(String match) throws IOException {
-        return this.zipfile.stream()
-                .map(ZipArchiveEntry::getName)
-                .filter(name -> name.matches(match))
-                .collect(Collectors.toList());
     }
 
     protected List<String>

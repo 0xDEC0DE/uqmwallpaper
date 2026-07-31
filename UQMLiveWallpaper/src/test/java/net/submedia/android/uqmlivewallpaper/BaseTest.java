@@ -203,14 +203,17 @@ public abstract class BaseTest {
             this.zipContents.putAll(zipContents);
         }
 
+        // NOTE(nic): previous versions did not assume a relationship between the alienRace and
+        //  the aniFilename, the current code expects them to match; check the commit history if
+        //  you'd like to decouple them, and want the fixture to match
         public void setup(BaseTest testInstance) throws IOException {
             if (alienRace == null) alienRace = createString();
+            if (aniFilename == null) aniFilename = alienRace + ".ani";
             if (pngFilename == null) pngFilename = createString() + ".png";
-            if (aniFilename == null) aniFilename = createString() + ".ani";
             if (hotspot == null) hotspot = new Coord(rand.nextInt(-100, 100), rand.nextInt(-100, 100));
             if (size == null) size = new Coord(rand.nextInt(320), rand.nextInt(240));
 
-            contentBaseDir = "comm/%s/".formatted(alienRace);
+            contentBaseDir = "base/comm/%s/".formatted(alienRace);
             StringBuilder aniFileContentBuilder = new StringBuilder();
 
             if (!skipDefaultContent) {

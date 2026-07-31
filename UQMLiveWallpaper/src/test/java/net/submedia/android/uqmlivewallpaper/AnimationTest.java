@@ -95,7 +95,7 @@ public class AnimationTest extends BaseTest {
             Assert.assertNotNull(animation);
             Assert.assertNotNull(animation.getContent());
             Assert.assertFalse(animation.getContent().frame.isEmpty());
-            String expectedPath = "comm/%s/%s".formatted(alienRace, pngFilename);
+            String expectedPath = "base/comm/%s/%s".formatted(alienRace, pngFilename);
             Assert.assertEquals(expectedPath, animation.getContent().frame.get(0).filename);
 
             Animation.Frame frame = animation.getFrameList().get(0);
