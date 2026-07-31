@@ -26,29 +26,29 @@ public class WallpaperViewModel {
     private Runnable mOnDrawNeeded;
     private HandlerThread mWorkerThread;
     private Handler mWorkerHandler;
-    private boolean mVisible;
+    private volatile boolean mVisible;
     private final Object mLock = new Object();
-    private int mWidth;
-    private int mHeight;
-    private int mTotalWidth;
-    private float mScalingFactor;
-    private boolean mFillFrame;
-    private int mUserOffset;
-    private int mAspect;
-    private int mOffset;
-    private float mSystemXOffset;
-    private float mSystemXStep;
-    private boolean mIsLandscape;
-    private int mAnchor = 0;
-    private float mInitialPointerDistance = -1;
-    private float mInitialScalingFactor;
+    private volatile int mWidth;
+    private volatile int mHeight;
+    private volatile int mTotalWidth;
+    private volatile float mScalingFactor;
+    private volatile boolean mFillFrame;
+    private volatile int mUserOffset;
+    private volatile int mAspect;
+    private volatile int mOffset;
+    private volatile float mSystemXOffset;
+    private volatile float mSystemXStep;
+    private volatile boolean mIsLandscape;
+    private volatile int mAnchor = 0;
+    private volatile float mInitialPointerDistance = -1;
+    private volatile float mInitialScalingFactor;
     private final PointF mMidPoint = new PointF();
-    private String mErrorMessage;
-    private boolean mIsLoading;
+    private volatile String mErrorMessage;
+    private volatile boolean mIsLoading;
     private WallpaperSettings mSettings;
 
-    private int mAnimWidth;
-    private int mAnimHeight;
+    private volatile int mAnimWidth;
+    private volatile int mAnimHeight;
     private final Rect mDestRect = new Rect();
 
     private final Runnable mDrawRunnable = this::notifyDrawNeeded;
@@ -117,9 +117,7 @@ public class WallpaperViewModel {
         }
     }
 
-    public boolean isVisible() {
-        synchronized (mLock) { return mVisible; }
-    }
+    public boolean isVisible() { return mVisible; }
 
     private void scheduleDraw() {
         if (mVisible && mWorkerHandler != null) {
@@ -192,9 +190,7 @@ public class WallpaperViewModel {
         }
     }
 
-    public boolean isLoading() {
-        synchronized (mLock) { return mIsLoading; }
-    }
+    public boolean isLoading() { return mIsLoading; }
 
     public void setErrorMessage(String message) {
         synchronized (mLock) {
@@ -216,9 +212,7 @@ public class WallpaperViewModel {
     }
 
     @VisibleForTesting
-    public int getTotalWidth() {
-        synchronized (mLock) { return mTotalWidth; }
-    }
+    public int getTotalWidth() { return mTotalWidth; }
 
     public void setScalingFactor(float factor) {
         synchronized (mLock) {
@@ -228,9 +222,7 @@ public class WallpaperViewModel {
         }
     }
 
-    public float getScalingFactor() {
-        synchronized (mLock) { return mScalingFactor; }
-    }
+    public float getScalingFactor() { return mScalingFactor; }
 
     public void setFillFrame(boolean fillFrame) {
         synchronized (mLock) {
@@ -239,9 +231,7 @@ public class WallpaperViewModel {
         }
     }
 
-    public boolean getFillFrame() {
-        synchronized (mLock) { return mFillFrame; }
-    }
+    public boolean getFillFrame() { return mFillFrame; }
 
     public void setUserOffset(int userOffset) {
         synchronized (mLock) {
@@ -251,17 +241,11 @@ public class WallpaperViewModel {
         }
     }
 
-    public int getUserOffset() {
-        synchronized (mLock) { return mUserOffset; }
-    }
+    public int getUserOffset() { return mUserOffset; }
 
-    public int getOffset() {
-        synchronized (mLock) { return mOffset; }
-    }
+    public int getOffset() { return mOffset; }
 
-    public int getAspect() {
-        synchronized (mLock) { return mAspect; }
-    }
+    public int getAspect() { return mAspect; }
 
     public Rect getDestRect() {
         synchronized (mLock) { return new Rect(mDestRect); }
@@ -439,11 +423,7 @@ public class WallpaperViewModel {
         point.y = (event.getY(0) + event.getY(1)) / 2;
     }
 
-    public int getWidth() {
-        synchronized (mLock) { return mWidth; }
-    }
+    public int getWidth() { return mWidth; }
 
-    public int getHeight() {
-        synchronized (mLock) { return mHeight; }
-    }
+    public int getHeight() { return mHeight; }
 }
