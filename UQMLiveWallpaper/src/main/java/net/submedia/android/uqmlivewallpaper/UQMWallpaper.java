@@ -96,7 +96,8 @@ public class UQMWallpaper extends WallpaperService {
         WallpaperManager wm = WallpaperManager.getInstance(mContext);
         totalWidth = wm.getDesiredMinimumWidth();
         int totalHeight = wm.getDesiredMinimumHeight();
-        Log.d(TAG, "onCreate: totalWidth: %04d totalHeight: %04d".formatted(totalWidth, totalHeight));
+        if (Log.isLoggable(TAG, Log.DEBUG))
+            Log.d(TAG, "onCreate: totalWidth: %04d totalHeight: %04d".formatted(totalWidth, totalHeight));
 
         SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         migrateLegacyScaling(defaultPrefs);
@@ -107,7 +108,8 @@ public class UQMWallpaper extends WallpaperService {
         sLiveLockSettings = new WallpaperSettings(getSharedPreferences(PREFS_LOCK, MODE_PRIVATE));
         sLiveLockSettings.setTargetFlags(WallpaperManager.FLAG_LOCK);
 
-        Log.d(TAG, "Initial live settings loaded. Home: %s, Lock: %s".formatted(sLiveHomeSettings, sLiveLockSettings));
+        if (Log.isLoggable(TAG, Log.DEBUG))
+            Log.d(TAG, "Initial live settings loaded. Home: %s, Lock: %s".formatted(sLiveHomeSettings, sLiveLockSettings));
     }
 
     private void migrateToNamespacedPrefs(SharedPreferences defaultPrefs) {
@@ -116,13 +118,15 @@ public class UQMWallpaper extends WallpaperService {
 
         // Migration trigger: home prefs are empty AND default prefs have content
         if (homePrefs.getAll().isEmpty() && !defaultPrefs.getAll().isEmpty()) {
-            Log.i(TAG, "Migrating default preferences to home/lock namespace.");
+            if (Log.isLoggable(TAG, Log.INFO))
+                Log.i(TAG, "Migrating default preferences to home/lock namespace.");
             copyPrefs(defaultPrefs, homePrefs);
             copyPrefs(defaultPrefs, lockPrefs);
 
             // Retirement: Safely clear legacy global preferences after migration
             defaultPrefs.edit().clear().apply();
-            Log.i(TAG, "Legacy global preferences retired.");
+            if (Log.isLoggable(TAG, Log.INFO))
+                Log.i(TAG, "Legacy global preferences retired.");
         }
     }
 
@@ -154,7 +158,8 @@ public class UQMWallpaper extends WallpaperService {
 
     @Override
     public Engine onCreateEngine() {
-        Log.i(TAG, "onCreateEngine");
+        if (Log.isLoggable(TAG, Log.INFO))
+            Log.i(TAG, "onCreateEngine");
         CommsEngine engine = new CommsEngine();
         synchronized (mActiveEngines) {
             mActiveEngines.add(engine);
@@ -213,7 +218,8 @@ public class UQMWallpaper extends WallpaperService {
             mWallpaperFlags = getWallpaperFlagsSafe();
             mCreated = true;
             setTouchEventsEnabled(true);
-            Log.i(TAG, "Engine@%08x: onCreate(preview=%b, flags=%d)".formatted(System.identityHashCode(this), mIsPreview, mWallpaperFlags));
+            if (Log.isLoggable(TAG, Log.INFO))
+                Log.i(TAG, "Engine@%08x: onCreate(preview=%b, flags=%d)".formatted(System.identityHashCode(this), mIsPreview, mWallpaperFlags));
 
             if (mIsPreview) {
                 synchronized (mActiveEngines) {
@@ -225,18 +231,21 @@ public class UQMWallpaper extends WallpaperService {
                         }
                     }
                     if (!anotherPreviewActive && sStagedSettings != null && sStagedSettings.getState() != WallpaperSettings.State.COMMITTED) {
-                        Log.d(TAG, "Engine@%08x: New preview session detected. Discarding abandoned staged settings.".formatted(System.identityHashCode(this)));
+                        if (Log.isLoggable(TAG, Log.DEBUG))
+                            Log.d(TAG, "Engine@%08x: New preview session detected. Discarding abandoned staged settings.".formatted(System.identityHashCode(this)));
                         sStagedSettings = null;
                     }
                 }
 
                 if (sStagedSettings == null) {
-                    Log.d(TAG, "Engine@%08x: Creating new staged settings from live.".formatted(System.identityHashCode(this)));
+                    if (Log.isLoggable(TAG, Log.DEBUG))
+                        Log.d(TAG, "Engine@%08x: Creating new staged settings from live.".formatted(System.identityHashCode(this)));
                     WallpaperSettings source = getLiveSettings(mWallpaperFlags);
                     sStagedSettings = source.clone();
                     sStagedSettings.setState(WallpaperSettings.State.STAGED);
                 } else {
-                    Log.d(TAG, "Engine@%08x: Resuming existing staged settings (State: %s).".formatted(System.identityHashCode(this), sStagedSettings.getState()));
+                    if (Log.isLoggable(TAG, Log.DEBUG))
+                        Log.d(TAG, "Engine@%08x: Resuming existing staged settings (State: %s).".formatted(System.identityHashCode(this), sStagedSettings.getState()));
                 }
                 if (mWallpaperFlags != 0) {
                     sStagedSettings.setTargetFlags(mWallpaperFlags);
@@ -252,7 +261,8 @@ public class UQMWallpaper extends WallpaperService {
                 }
                 mSettings = getLiveSettings(mWallpaperFlags);
             }
-            Log.d(TAG, "Engine@%08x: Initialized with settings: %s".formatted(System.identityHashCode(this), mSettings));
+            if (Log.isLoggable(TAG, Log.DEBUG))
+                Log.d(TAG, "Engine@%08x: Initialized with settings: %s".formatted(System.identityHashCode(this), mSettings));
 
             mViewModel.updateFromSettings(mSettings);
             mSettings.addListener(this);
@@ -280,13 +290,16 @@ public class UQMWallpaper extends WallpaperService {
                 // targets, expand them. This ensures "Both" works even if commitment was triggered
                 // by a more narrow engine (like a preview engine).
                 if (sStagedSettings.getTargetFlags() != 0 && (sStagedSettings.getTargetFlags() & mWallpaperFlags) != mWallpaperFlags) {
-                    Log.d(TAG, "Expanding staged targets from %d to include %d".formatted(sStagedSettings.getTargetFlags(), mWallpaperFlags));
+                    if (Log.isLoggable(TAG, Log.DEBUG))
+                        Log.d(TAG, "Expanding staged targets from %d to include %d".formatted(sStagedSettings.getTargetFlags(), mWallpaperFlags));
                     sStagedSettings.setTargetFlags(sStagedSettings.getTargetFlags() | mWallpaperFlags);
                 }
-                Log.i(TAG, "Engine@%08x (LIVE): Adopting COMMITTED staged settings [trigger: %s]".formatted(System.identityHashCode(this), trigger));
+                if (Log.isLoggable(TAG, Log.INFO))
+                    Log.i(TAG, "Engine@%08x (LIVE): Adopting COMMITTED staged settings [trigger: %s]".formatted(System.identityHashCode(this), trigger));
                 performAdoption();
             } else {
-                Log.v(TAG, "Engine@%08x (LIVE): Skipping adoption [trigger: %s, reason: none ready]".formatted(System.identityHashCode(this), trigger));
+                if (Log.isLoggable(TAG, Log.VERBOSE))
+                    Log.v(TAG, "Engine@%08x (LIVE): Skipping adoption [trigger: %s, reason: none ready]".formatted(System.identityHashCode(this), trigger));
             }
         }
 
@@ -317,11 +330,13 @@ public class UQMWallpaper extends WallpaperService {
             }
 
             if (!success) {
-                Log.e(TAG, "Failed to persist settings to disk during adoption.");
+                if (Log.isLoggable(TAG, Log.ERROR))
+                    Log.e(TAG, "Failed to persist settings to disk during adoption.");
                 return;
             }
 
-            Log.i(TAG, "Live settings handoff complete for targets: " + targets);
+            if (Log.isLoggable(TAG, Log.INFO))
+                Log.i(TAG, "Live settings handoff complete for targets: " + targets);
             sStagedSettings = null;
 
             // Force all engines to refresh from their respective updated live settings
@@ -346,7 +361,8 @@ public class UQMWallpaper extends WallpaperService {
 
         @Override
         public void onSettingsChanged(String key) {
-            Log.d(TAG, "Engine@%08x: onSettingsChanged(%s)".formatted(System.identityHashCode(this), key));
+            if (Log.isLoggable(TAG, Log.DEBUG))
+                Log.d(TAG, "Engine@%08x: onSettingsChanged(%s)".formatted(System.identityHashCode(this), key));
             try {
                 if (key == null) return;
 
@@ -368,7 +384,8 @@ public class UQMWallpaper extends WallpaperService {
 
         private void loadAnimation(String race) {
             if (mLoaderExecutor.isShutdown()) return;
-            Log.d(TAG, "Engine@%08x: Loading animation for %s".formatted(System.identityHashCode(this), race));
+            if (Log.isLoggable(TAG, Log.DEBUG))
+                Log.d(TAG, "Engine@%08x: Loading animation for %s".formatted(System.identityHashCode(this), race));
             mViewModel.setLoading(true);
             try {
                 mLoaderExecutor.execute(() -> {
@@ -381,11 +398,14 @@ public class UQMWallpaper extends WallpaperService {
                         }
                         mViewModel.setAnimation(anim);
                         mViewModel.updateAspect(anim.getFrame());
-                        Log.d(TAG, "Engine@%08x: Successfully loaded animation for %s".formatted(System.identityHashCode(this), race));
+                        if (Log.isLoggable(TAG, Log.DEBUG))
+                            Log.d(TAG, "Engine@%08x: Successfully loaded animation for %s".formatted(System.identityHashCode(this), race));
                     } catch (OperationCanceledException e) {
-                        Log.i(TAG, "Engine@%08x: Loading cancelled for %s".formatted(System.identityHashCode(this), race));
+                        if (Log.isLoggable(TAG, Log.INFO))
+                            Log.i(TAG, "Engine@%08x: Loading cancelled for %s".formatted(System.identityHashCode(this), race));
                     } catch (Exception e) {
-                        Log.w(TAG, "Engine@%08x: Failed to load animation: %s".formatted(System.identityHashCode(this), race), e);
+                        if (Log.isLoggable(TAG, Log.WARN))
+                            Log.w(TAG, "Engine@%08x: Failed to load animation: %s".formatted(System.identityHashCode(this), race), e);
                         mViewModel.setErrorMessage(mContext.getString(R.string.error_loading_alien, race));
                         mViewModel.setAnimation(null);
                     } finally {
@@ -399,7 +419,8 @@ public class UQMWallpaper extends WallpaperService {
 
         @Override
         public void onDestroy() {
-            Log.i(TAG, "Engine@%08x: onDestroy(preview=%b, flags=%d)".formatted(System.identityHashCode(this), mIsPreview, mWallpaperFlags));
+            if (Log.isLoggable(TAG, Log.INFO))
+                Log.i(TAG, "Engine@%08x: onDestroy(preview=%b, flags=%d)".formatted(System.identityHashCode(this), mIsPreview, mWallpaperFlags));
             synchronized (mActiveEngines) {
                 mActiveEngines.remove(this);
             }
@@ -416,7 +437,8 @@ public class UQMWallpaper extends WallpaperService {
 
         @Override
         public void onVisibilityChanged(boolean visible) {
-            Log.i(TAG, "Engine@%08x: onVisibilityChanged(%b) [preview=%b, flags=%d]".formatted(System.identityHashCode(this), visible, mIsPreview, mWallpaperFlags));
+            if (Log.isLoggable(TAG, Log.INFO))
+                Log.i(TAG, "Engine@%08x: onVisibilityChanged(%b) [preview=%b, flags=%d]".formatted(System.identityHashCode(this), visible, mIsPreview, mWallpaperFlags));
             mIsVisible = visible;
             mViewModel.setVisible(visible);
             if (visible) {
@@ -427,7 +449,8 @@ public class UQMWallpaper extends WallpaperService {
         }
 
         private void init_mAnim() {
-            Log.d(TAG, "Engine@%08x: Triggering initial animation load.".formatted(System.identityHashCode(this)));
+            if (Log.isLoggable(TAG, Log.DEBUG))
+                Log.d(TAG, "Engine@%08x: Triggering initial animation load.".formatted(System.identityHashCode(this)));
             mViewModel.setScalingFactor(mSettings.scalingFactor);
             mViewModel.setFillFrame(mSettings.fillFrame);
             mViewModel.setUserOffset(mSettings.offset);
@@ -437,7 +460,8 @@ public class UQMWallpaper extends WallpaperService {
         @Override
         public void onDesiredSizeChanged(int desiredWidth, int desiredHeight) {
             super.onDesiredSizeChanged(desiredWidth, desiredHeight);
-            Log.d(TAG, "Engine@%08x: onDesiredSizeChanged(w=%d, h=%d)".formatted(System.identityHashCode(this), desiredWidth, desiredHeight));
+            if (Log.isLoggable(TAG, Log.DEBUG))
+                Log.d(TAG, "Engine@%08x: onDesiredSizeChanged(w=%d, h=%d)".formatted(System.identityHashCode(this), desiredWidth, desiredHeight));
             applyNewTotalWidth(desiredWidth, 0);
         }
 
@@ -451,12 +475,14 @@ public class UQMWallpaper extends WallpaperService {
             if (newTotalWidth <= 0) return;
 
             if (newTotalWidth != totalWidth) {
-                Log.d(TAG, "Engine@%08x: Updating totalWidth from %d to %d".formatted(System.identityHashCode(this), totalWidth, newTotalWidth));
+                if (Log.isLoggable(TAG, Log.DEBUG))
+                    Log.d(TAG, "Engine@%08x: Updating totalWidth from %d to %d".formatted(System.identityHashCode(this), totalWidth, newTotalWidth));
                 setTotalWidth(newTotalWidth);
             }
 
             if (currentSurfaceWidth > 0 && newTotalWidth == currentSurfaceWidth) {
-                Log.d(TAG, "Engine@%08x: Total width (%d) matches surface width. Scheduling re-check.".formatted(System.identityHashCode(this), newTotalWidth));
+                if (Log.isLoggable(TAG, Log.DEBUG))
+                    Log.d(TAG, "Engine@%08x: Total width (%d) matches surface width. Scheduling re-check.".formatted(System.identityHashCode(this), newTotalWidth));
                 sLifecycleHandler.postDelayed(() -> updateTotalWidthFromManager(0), 500);
             }
         }
@@ -464,7 +490,8 @@ public class UQMWallpaper extends WallpaperService {
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
-            Log.d(TAG, "Engine@%08x: onSurfaceChanged(w=%d, h=%d)".formatted(System.identityHashCode(this), width, height));
+            if (Log.isLoggable(TAG, Log.DEBUG))
+                Log.d(TAG, "Engine@%08x: onSurfaceChanged(w=%d, h=%d)".formatted(System.identityHashCode(this), width, height));
             if (width < 0 || height < 0) return;
 
             updateTotalWidthFromManager(width);
@@ -472,7 +499,8 @@ public class UQMWallpaper extends WallpaperService {
             mViewModel.onSurfaceChanged(width, height);
             Animation anim = mViewModel.getAnimation();
             if (anim != null) {
-                Log.d(TAG, "Engine@%08x: onSurfaceChanged: Animation exists, updating aspect.".formatted(System.identityHashCode(this)));
+                if (Log.isLoggable(TAG, Log.DEBUG))
+                    Log.d(TAG, "Engine@%08x: onSurfaceChanged: Animation exists, updating aspect.".formatted(System.identityHashCode(this)));
                 mViewModel.updateAspect(anim.getFrame());
             }
         }
@@ -480,7 +508,8 @@ public class UQMWallpaper extends WallpaperService {
         @Override
         public void onOffsetsChanged(float xOffset, float yOffset,
                                      float xStep, float yStep, int xPixels, int yPixels) {
-            Log.v(TAG, "Engine@%08x: onOffsetsChanged(xOff=%.2f)".formatted(System.identityHashCode(this), xOffset));
+            if (Log.isLoggable(TAG, Log.VERBOSE))
+                Log.v(TAG, "Engine@%08x: onOffsetsChanged(xOff=%.2f)".formatted(System.identityHashCode(this), xOffset));
             boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
             mViewModel.onOffsetsChanged(xOffset, xStep, isLandscape);
         }
@@ -488,7 +517,8 @@ public class UQMWallpaper extends WallpaperService {
         @Override
         public void onTouchEvent(MotionEvent event) {
             if (!mIsPreview) return;
-            Log.v(TAG, "onTouchEvent: " + event);
+            if (Log.isLoggable(TAG, Log.VERBOSE))
+                Log.v(TAG, "onTouchEvent: " + event);
             mViewModel.onTouchEvent(event);
             mSettings.updateOffset(mViewModel.getUserOffset());
             mSettings.updateScalingFactor(mViewModel.getScalingFactor());
@@ -565,9 +595,11 @@ public class UQMWallpaper extends WallpaperService {
 
         @Override
         public Bundle onCommand(String action, int x, int y, int z, Bundle extras, boolean resultRequested) {
-            Log.v(TAG, "Engine@%08x: onCommand(action=%s, flags=%d)".formatted(System.identityHashCode(this), action, mWallpaperFlags));
+            if (Log.isLoggable(TAG, Log.VERBOSE))
+                Log.v(TAG, "Engine@%08x: onCommand(action=%s, flags=%d)".formatted(System.identityHashCode(this), action, mWallpaperFlags));
             if (COMMAND_REAPPLY.equals(action) && sStagedSettings != null) {
-                Log.i(TAG, "Engine@%08x: REAPPLY received. Committing staged settings for adoption.".formatted(System.identityHashCode(this)));
+                if (Log.isLoggable(TAG, Log.INFO))
+                    Log.i(TAG, "Engine@%08x: REAPPLY received. Committing staged settings for adoption.".formatted(System.identityHashCode(this)));
 
                 synchronized (mActiveEngines) {
                     // The user confirmed selection. Update target flags to match this engine's

@@ -1,5 +1,6 @@
 package net.submedia.android.uqmlivewallpaper;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -67,6 +68,7 @@ public abstract class BaseTest {
         mockedStaticLog.when(() -> Log.w(anyString(), anyString())).thenReturn(0);
         mockedStaticLog.when(() -> Log.e(anyString(), anyString())).thenReturn(0);
         mockedStaticLog.when(() -> Log.v(anyString(), anyString())).thenReturn(0);
+        mockedStaticLog.when(() -> Log.isLoggable(anyString(), anyInt())).thenReturn(true);
 
         lenient().when(mockContext.getAssets()).thenReturn(mockAssetManager);
         lenient().when(mockContext.getResources()).thenReturn(mockResources);

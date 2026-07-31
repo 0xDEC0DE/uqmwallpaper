@@ -135,7 +135,8 @@ public class Content implements AutoCloseable {
             // correctly handles absolute offsets within the APK.
             FileChannel apkChannel = new FileInputStream(afd.getFileDescriptor()).getChannel();
             var subChannel = new BoundedSeekableByteChannel(apkChannel, afd.getStartOffset(), afd.getLength());
-            Log.i(TAG, "Loading embedded %s from APK (offset=%d, len=%d)".formatted(zipfile, afd.getStartOffset(), afd.getLength()));
+            if (Log.isLoggable(TAG, Log.INFO))
+                Log.i(TAG, "Loading embedded %s from APK (offset=%d, len=%d)".formatted(zipfile, afd.getStartOffset(), afd.getLength()));
             return ZipFile.builder().setSeekableByteChannel(subChannel).get();
         } catch (IOException e) {
             if (this.afd != null) {

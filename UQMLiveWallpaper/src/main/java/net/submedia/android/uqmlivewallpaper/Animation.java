@@ -126,8 +126,10 @@ class Animation implements AutoCloseable {
         final Bitmap bg = this.content.frame.get(0).content;
         this.result = bg.copy(Objects.requireNonNull(bg.getConfig()), true);
         this.canvas = new Canvas(this.result);
-        Log.d(TAG, "Animation initialized for race: " + alien_race);
-        Log.v(TAG, "Detailed animation data: " + this);
+        if (Log.isLoggable(TAG, Log.DEBUG))
+            Log.d(TAG, "Animation initialized for race: " + alien_race);
+        if (Log.isLoggable(TAG, Log.VERBOSE))
+            Log.v(TAG, "Detailed animation data: " + this);
     }
 
     @VisibleForTesting
@@ -198,7 +200,8 @@ class Animation implements AutoCloseable {
                 continue;
             }
             activeMask |= ActiveBit;
-            // Log.v(TAG, "ActiveBit: %#x ActiveMask: %#x StartIndex: %d NumFrames: %d CurIndex: %d".formatted(ActiveBit, ActiveMask, f.StartIndex, f.NumFrames, f.CurIndex));
+            // if (Log.isLoggable(TAG, Log.VERBOSE))
+            //     Log.v(TAG, "ActiveBit: %#x ActiveMask: %#x StartIndex: %d NumFrames: %d CurIndex: %d".formatted(ActiveBit, ActiveMask, f.StartIndex, f.NumFrames, f.CurIndex));
 
             final int num_frames = f.NumFrames - 1;
 

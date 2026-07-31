@@ -90,7 +90,8 @@ public class WallpaperSettings extends PreferenceDataStore {
     }
 
     public void setState(State state) {
-        Log.d(TAG, "Settings state transition: %s -> %s".formatted(this.mState, state));
+        if (Log.isLoggable(TAG, Log.DEBUG))
+            Log.d(TAG, "Settings state transition: %s -> %s".formatted(this.mState, state));
         this.mState = state;
     }
 

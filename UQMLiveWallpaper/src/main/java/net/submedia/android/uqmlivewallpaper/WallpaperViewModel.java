@@ -274,7 +274,8 @@ public class WallpaperViewModel {
             mHeight = height;
             updateAspect();
             if (mWorkerHandler != null) mWorkerHandler.post(mDrawRunnable);
-            Log.d(TAG, "Surface dimensions updated: %dx%d (computed offset: %d)".formatted(width, height, mOffset));
+            if (Log.isLoggable(TAG, Log.DEBUG))
+                Log.d(TAG, "Surface dimensions updated: %dx%d (computed offset: %d)".formatted(width, height, mOffset));
         }
     }
 
@@ -361,7 +362,8 @@ public class WallpaperViewModel {
                     break;
             }
             if (mWorkerHandler != null) mWorkerHandler.post(mDrawRunnable);
-            Log.v(TAG, "Touch interaction: offset=%d, scaling=%.2f(%dpx)".formatted(mOffset, mScalingFactor, (int) getScaledImageWidth()));
+            if (Log.isLoggable(TAG, Log.VERBOSE))
+                Log.v(TAG, "Touch interaction: offset=%d, scaling=%.2f(%dpx)".formatted(mOffset, mScalingFactor, (int) getScaledImageWidth()));
         }
     }
 
